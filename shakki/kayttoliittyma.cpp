@@ -87,20 +87,6 @@ void Kayttoliittyma::piirraLauta()
 		}
 		wcout << endl;
 	}
-
-	/*
-	for (int x = 0; x < 8; ++x) {
-		for (int y = 0; y < 8; ++y) {
-			if (_asema->_lauta[x][y] != NULL) {
-				wcout << " " << _asema->_lauta[x][y]->getUnicode() << " ";
-			}
-			else {
-				wcout << "   ";
-			}
-		}
-		wcout << endl;
-	}
-	*/
 }
 
 
@@ -111,9 +97,40 @@ void Kayttoliittyma::piirraLauta()
 */
 Siirto Kayttoliittyma::annaVastustajanSiirto()
 {
-	Siirto siirto;
+	string nappulatyyppi, alkuasema, loppuasema;
+
+	string input;
+	cout << "Anna siirto: ";
+	cin >> input;
+
+	if (input.find('K') != std::string::npos)
+		nappulatyyppi = "Kuningas";
+	else if (input.find('D') != std::string::npos)
+		nappulatyyppi = "Daami";
+	else if (input.find('L') != std::string::npos)
+		nappulatyyppi = "Lähetti";
+	else if (input.find('R') != std::string::npos)
+		nappulatyyppi = "Ratsu";
+	else if (input.find('T') != std::string::npos)
+		nappulatyyppi = "Torni";
+	else
+		cout << "Virheellinen siirto. Anna siirto muodossa Rg1-f3" << endl;
+
+	alkuasema = input.substr(1, 2);
+	loppuasema = input.substr(4, 5);
+
+	cout << "Nappulatyyppi: " << nappulatyyppi << "\nNappula :" << alkuasema << " " << loppuasema << endl;
+
+	int x, y;
+	y =  std::stoi(alkuasema.substr(2, 3));
+	cout << y << endl;
+
+	Ruutu alkuruutu(x, y);
+	Ruutu loppuruutu(x, y);
+
+	Siirto siirto(alkuruutu, loppuruutu);
+
 	return siirto;
-	
 }
 
 
