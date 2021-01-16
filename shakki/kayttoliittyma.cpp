@@ -22,69 +22,73 @@ Kayttoliittyma* Kayttoliittyma::getInstance()
 
 void Kayttoliittyma::piirraLauta()
 {
+	_setmode(_fileno(stdout), _O_U16TEXT);
+
 	for (int i = 7; i >= 0; i--) {
 		for (int j = 0; j < 8; j++) {
 			if (j == 0 && i == 7) {
+				wcout << 8;
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_INTENSITY | BACKGROUND_RED |
 					BACKGROUND_GREEN | BACKGROUND_BLUE);
-				//wcout << 8;
 			}
 			if (j == 0 && i == 6) {
-				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_INTENSITY | BACKGROUND_RED |
-					BACKGROUND_GREEN | BACKGROUND_BLUE);
-				//wcout << 7;
+				wcout << 7;
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_INTENSITY);
 			}
 			if (j == 0 && i == 5) {
+				wcout << 6;
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_INTENSITY | BACKGROUND_RED |
 					BACKGROUND_GREEN | BACKGROUND_BLUE);
-				//wcout << 6;
 			}
 			if (j == 0 && i == 4) {
-				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_INTENSITY | BACKGROUND_RED |
-					BACKGROUND_GREEN | BACKGROUND_BLUE);
-				//wcout << 5;
+				wcout << 5;
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_INTENSITY);
 			}
 			if (j == 0 && i == 3) {
+				wcout << 4;
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_INTENSITY | BACKGROUND_RED |
 					BACKGROUND_GREEN | BACKGROUND_BLUE);
-				//wcout << 4;
 			}
 			if (j == 0 && i == 2) {
-				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_INTENSITY | BACKGROUND_RED |
-					BACKGROUND_GREEN | BACKGROUND_BLUE);
-				//wcout << 3;
+				wcout << 3;
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_INTENSITY);
 			}
 			if (j == 0 && i == 1) {
+				wcout << 2;
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_INTENSITY | BACKGROUND_RED |
 					BACKGROUND_GREEN | BACKGROUND_BLUE);
-				//wcout << 2;
 			}
 			if (j == 0 && i == 0) {
-				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_INTENSITY | BACKGROUND_RED |
-					BACKGROUND_GREEN | BACKGROUND_BLUE);
-				//wcout << 1;
+				wcout << 1;
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_INTENSITY);
 			}
+
 			if (i % 2 != 0) {
 				if (j % 2 == 0) {
 					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_INTENSITY | BACKGROUND_RED |
 						BACKGROUND_GREEN | BACKGROUND_BLUE);
-				} else {
-					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN | BACKGROUND_RED);
-				}
+				} else
+					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_INTENSITY);
 			}
 			else {
 				if (j % 2 != 0) {
 					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_INTENSITY | BACKGROUND_RED |
 							BACKGROUND_GREEN | BACKGROUND_BLUE);
-				} else {
-					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN | BACKGROUND_RED);
-				}
+				} else
+					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_INTENSITY);
+			}
+
+			if (_asema->_lauta[i][j] != NULL) {
+				wcout << " " << _asema->_lauta[i][j]->getUnicode() << " ";
+			}
+			else {
+				wcout << "   ";
 			}
 		}
+		wcout << endl;
 	}
 
-	_setmode(_fileno(stdout), _O_U16TEXT);
-
+	/*
 	for (int x = 0; x < 8; ++x) {
 		for (int y = 0; y < 8; ++y) {
 			if (_asema->_lauta[x][y] != NULL) {
@@ -96,6 +100,7 @@ void Kayttoliittyma::piirraLauta()
 		}
 		wcout << endl;
 	}
+	*/
 }
 
 
