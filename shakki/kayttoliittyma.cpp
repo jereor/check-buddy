@@ -27,39 +27,39 @@ void Kayttoliittyma::piirraLauta()
 	for (int i = 7; i >= 0; i--) {
 		for (int j = 0; j < 8; j++) {
 			if (j == 0 && i == 7) {
-				wcout << 8;
+				wcout << i+1;
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_INTENSITY | BACKGROUND_RED |
 					BACKGROUND_GREEN | BACKGROUND_BLUE);
 			}
 			if (j == 0 && i == 6) {
-				wcout << 7;
+				wcout << i+1;
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_INTENSITY);
 			}
 			if (j == 0 && i == 5) {
-				wcout << 6;
+				wcout << i+1;
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_INTENSITY | BACKGROUND_RED |
 					BACKGROUND_GREEN | BACKGROUND_BLUE);
 			}
 			if (j == 0 && i == 4) {
-				wcout << 5;
+				wcout << i+1;
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_INTENSITY);
 			}
 			if (j == 0 && i == 3) {
-				wcout << 4;
+				wcout << i+1;
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_INTENSITY | BACKGROUND_RED |
 					BACKGROUND_GREEN | BACKGROUND_BLUE);
 			}
 			if (j == 0 && i == 2) {
-				wcout << 3;
+				wcout << i+1;
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_INTENSITY);
 			}
 			if (j == 0 && i == 1) {
-				wcout << 2;
+				wcout << i+1;
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_INTENSITY | BACKGROUND_RED |
 					BACKGROUND_GREEN | BACKGROUND_BLUE);
 			}
 			if (j == 0 && i == 0) {
-				wcout << 1;
+				wcout << i+1;
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_INTENSITY);
 			}
 
@@ -86,6 +86,11 @@ void Kayttoliittyma::piirraLauta()
 			}
 		}
 		wcout << endl;
+
+	}
+	for (int k = 1; k < 8; k++)
+	{
+		wcout << k << "  ";
 	}
 }
 
@@ -97,6 +102,7 @@ void Kayttoliittyma::piirraLauta()
 */
 Siirto Kayttoliittyma::annaVastustajanSiirto()
 {
+	char kirjaimet[] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
 	string nappulatyyppi, alkuasema, loppuasema;
 
 	string input;
@@ -121,12 +127,22 @@ Siirto Kayttoliittyma::annaVastustajanSiirto()
 
 	cout << "Nappulatyyppi: " << nappulatyyppi << "\nNappula :" << alkuasema << " " << loppuasema << endl;
 
-	int x, y;
-	y =  std::stoi(alkuasema.substr(2, 3));
-	cout << y << endl;
+	int x1, y1, x2, y2;
+	for (int i = 0; i < sizeof(kirjaimet); i++) { 
+		if (std::stoi(alkuasema.substr(1, 2) = kirjaimet[i]))
+			x1 = i;
+	}
+	y1 =  std::stoi(alkuasema.substr(2, 3));
+	cout << y1 << endl;
 
-	Ruutu alkuruutu(x, y);
-	Ruutu loppuruutu(x, y);
+	for (int i = 0; i < sizeof(kirjaimet); i++) {
+		if (std::stoi(alkuasema.substr(1, 2) = kirjaimet[i]))
+			x1 = i;
+	}
+	y2 = std::stoi(loppuasema.substr(2, 3));
+	
+	Ruutu alkuruutu(x1, y1);
+	Ruutu loppuruutu(x2, y2);
 
 	Siirto siirto(alkuruutu, loppuruutu);
 

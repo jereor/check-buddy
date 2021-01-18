@@ -34,7 +34,7 @@ int main()
 	bool onTorni = false;
 	bool lyhytLinna = false;
 	bool pitkaLinna = false;
-
+	char kirjaimet[] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
 
 	string input;
 	cout << "Anna siirto: ";
@@ -73,27 +73,22 @@ int main()
 		alkuasema = input.substr(1, 2);
 		loppuasema = input.substr(4, 5);
 
-		int x1, y1, x2, y2;
-		if (alkuasema.substr(0, 1) == "a") x1 = a;
-		if (alkuasema.substr(0, 1) == "b") x1 = b;
-		if (alkuasema.substr(0, 1) == "c") x1 = c;
-		if (alkuasema.substr(0, 1) == "d") x1 = d;
-		if (alkuasema.substr(0, 1) == "e") x1 = e;
-		if (alkuasema.substr(0, 1) == "f") x1 = f;
-		if (alkuasema.substr(0, 1) == "g") x1 = g;
-		if (alkuasema.substr(0, 1) == "h") x1 = h;
-
-		if (loppuasema.substr(0, 1) == "a") x2 = a;
-		if (loppuasema.substr(0, 1) == "b") x2 = b;
-		if (loppuasema.substr(0, 1) == "c") x2 = c;
-		if (loppuasema.substr(0, 1) == "d") x2 = d;
-		if (loppuasema.substr(0, 1) == "e") x2 = e;
-		if (loppuasema.substr(0, 1) == "f") x2 = f;
-		if (loppuasema.substr(0, 1) == "g") x2 = g;
-		if (loppuasema.substr(0, 1) == "h") x2 = h;
-
+		int x1 = 0, y1 = 0, x2 = 0, y2 = 0;
+		for (int i = 0; i < sizeof(kirjaimet); i++) {
+			char c = alkuasema[0];
+			if (c == kirjaimet[i])
+				x1 = i;
+		}
 		y1 = std::stoi(alkuasema.substr(1, 2));
+		cout << y1 << endl;
+
+		for (int i = 0; i < sizeof(kirjaimet); i++) {
+			char c = loppuasema[0];
+			if (c == kirjaimet[i])
+				x2 = i;
+		}
 		y2 = std::stoi(loppuasema.substr(1, 2));
+
 		cout << "Alkuasema - X1: " << x1 << " Y1: " << y1 << endl;
 		cout << "Loppuasema - X2: " << x2 << " Y2: " << y2 << endl;
 	}
