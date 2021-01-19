@@ -29,11 +29,11 @@ Ruutu Siirto::getLoppuruutu()
 
 bool Siirto::onkoLyhytLinna() 
 {
-	return 0;
+	return _lyhytLinna;
 }
 
 
 bool Siirto::onkoPitkalinna() 
 {
-	return 0;
+	return _pitkaLinna;
 }

@@ -23,6 +23,7 @@ Kayttoliittyma* Kayttoliittyma::getInstance()
 void Kayttoliittyma::piirraLauta()
 {
 	_setmode(_fileno(stdout), _O_U16TEXT);
+	char kirjaimet[] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
 
 	for (int i = 7; i >= 0; i--) {
 		for (int j = 0; j < 8; j++) {
@@ -79,18 +80,21 @@ void Kayttoliittyma::piirraLauta()
 			}
 
 			if (_asema->_lauta[i][j] != NULL) {
-				wcout << " " << _asema->_lauta[i][j]->getUnicode() << " ";
-			}
-			else {
+				if (i == 1)
+					wcout << " " << _asema->_lauta[i][j]->getUnicode();
+				else
+					wcout << " " << _asema->_lauta[i][j]->getUnicode() << " ";
+			}	
+			else
 				wcout << "   ";
-			}
 		}
 		wcout << endl;
 
 	}
-	for (int k = 1; k < 8; k++)
+	wcout << " ";
+	for (int k = 0; k < 8; k++)
 	{
-		wcout << k << "  ";
+		wcout << " " << kirjaimet[k] << " ";
 	}
 }
 
@@ -105,9 +109,19 @@ Siirto Kayttoliittyma::annaVastustajanSiirto()
 	char kirjaimet[] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
 	string nappulatyyppi, alkuasema, loppuasema;
 
+	_setmode(_fileno(stdout), _O_U16TEXT);
+
 	string input;
 	cout << "Anna siirto: ";
 	cin >> input;
+
+	if (input == "L0-0" || input == "L0-0-0")
+	{
+		if (input == "L0-0")
+			return Siirto(true, false);
+		else if (input == "L0-0-0")
+			return Siirto(false, true);
+	}
 
 	if (input.find('K') != std::string::npos)
 		nappulatyyppi = "Kuningas";
@@ -128,16 +142,19 @@ Siirto Kayttoliittyma::annaVastustajanSiirto()
 	cout << "Nappulatyyppi: " << nappulatyyppi << "\nNappula :" << alkuasema << " " << loppuasema << endl;
 
 	int x1, y1, x2, y2;
-	for (int i = 0; i < sizeof(kirjaimet); i++) { 
-		if (std::stoi(alkuasema.substr(1, 2) = kirjaimet[i]))
+	
+	char c = alkuasema[0];
+	for (int i = 0; i < sizeof(kirjaimet); i++) {
+		if (c == kirjaimet[i])
 			x1 = i;
 	}
 	y1 =  std::stoi(alkuasema.substr(2, 3));
 	cout << y1 << endl;
 
+	c = loppuasema[0];
 	for (int i = 0; i < sizeof(kirjaimet); i++) {
-		if (std::stoi(alkuasema.substr(1, 2) = kirjaimet[i]))
-			x1 = i;
+		if (c == kirjaimet[i])
+			x2 = i;
 	}
 	y2 = std::stoi(loppuasema.substr(2, 3));
 	

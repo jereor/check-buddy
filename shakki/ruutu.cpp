@@ -9,13 +9,13 @@ Ruutu::Ruutu(int sarake, int rivi)
 
 int Ruutu::getRivi()
 {
-	return 0;
+	return _rivi;
 }
 
 
 int Ruutu::getSarake()
 {
-	return 0;
+	return _sarake;
 }
 
 
