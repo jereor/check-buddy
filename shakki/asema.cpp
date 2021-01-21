@@ -165,7 +165,9 @@ void Asema::paivitaAsema(Siirto *siirto)
 
 		// katsotaan jos liikkunut nappula on torni niin muutetaan onkoTorniLiikkunut arvo (molemmille väreille ja molemmille torneille)
 
-	//päivitetään _siirtovuoro
+		// päivitetään _siirtovuoro
+		if (getSiirtovuoro() == 0) setSiirtovuoro(1);
+		else setSiirtovuoro(0);
 	}
 
 }

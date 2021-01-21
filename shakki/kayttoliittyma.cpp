@@ -96,6 +96,7 @@ void Kayttoliittyma::piirraLauta()
 	{
 		wcout << " " << kirjaimet[k] << " ";
 	}
+	wcout << endl;
 }
 
 
@@ -107,47 +108,47 @@ void Kayttoliittyma::piirraLauta()
 Siirto Kayttoliittyma::annaVastustajanSiirto()
 {
 	char kirjaimet[] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
-	string nappulatyyppi, alkuasema, loppuasema;
+	wstring nappulatyyppi, alkuasema, loppuasema;
 
 	_setmode(_fileno(stdout), _O_U16TEXT);
 
 	while (true)
 	{
-		string input;
-		cout << "Anna siirto: ";
-		cin >> input;
+		wstring input;
+		wcout << "\nAnna siirto: ";
+		wcin >> input;
 
-		if (input == "0")
+		if (input == L"0")
 		{
 			break;
 		}
 
 		// Lyhyt ja pitkä linna
-		if (input == "L0-0" || input == "L0-0-0")
+		if (input == L"0-0" || input == L"0-0-0")
 		{
-			if (input == "L0-0")
+			if (input == L"0-0")
 				return Siirto(true, false);
-			else if (input == "L0-0-0")
+			else if (input == L"0-0-0")
 				return Siirto(false, true);
 		}
 
 		if (input.find('K') != std::string::npos)
-			nappulatyyppi = "Kuningas";
+			nappulatyyppi = L"Kuningas";
 		else if (input.find('D') != std::string::npos)
-			nappulatyyppi = "Daami";
+			nappulatyyppi = L"Daami";
 		else if (input.find('L') != std::string::npos)
-			nappulatyyppi = "Lähetti";
+			nappulatyyppi = L"Lähetti";
 		else if (input.find('R') != std::string::npos)
-			nappulatyyppi = "Ratsu";
+			nappulatyyppi = L"Ratsu";
 		else if (input.find('T') != std::string::npos)
-			nappulatyyppi = "Torni";
+			nappulatyyppi = L"Torni";
 		else
-			cout << "Virheellinen siirto. Anna siirto muodossa Rg1-f3" << endl;
+			wcout << "Virheellinen siirto. Anna siirto muodossa Rg1-f3" << endl;
 
 		alkuasema = input.substr(1, 2);
 		loppuasema = input.substr(4, 5);
 
-		cout << "Nappulatyyppi: " << nappulatyyppi << "\nNappula :" << alkuasema << " " << loppuasema << endl;
+		wcout << "Nappulatyyppi: " << nappulatyyppi << endl << "Nappula :" << alkuasema << " " << loppuasema << endl;
 
 		int x1, y1, x2, y2;
 
@@ -156,15 +157,28 @@ Siirto Kayttoliittyma::annaVastustajanSiirto()
 			if (c == kirjaimet[i])
 				x1 = i;
 		}
-		y1 = std::stoi(alkuasema.substr(2, 3));
-		cout << y1 << endl;
+		try
+		{
+			y1 = std::stoi(alkuasema.substr(1, 2));
+		}
+		catch (...) {
+			wcout << "\nFail!";
+		}
 
 		c = loppuasema[0];
 		for (int i = 0; i < sizeof(kirjaimet); i++) {
 			if (c == kirjaimet[i])
 				x2 = i;
 		}
-		y2 = std::stoi(loppuasema.substr(2, 3));
+		try
+		{
+			y2 = std::stoi(loppuasema.substr(1, 2));
+		}
+		catch (...) {
+			wcout << "\nFail!";
+		}
+
+		wcout << x1 << " " << y1 << " " <<  x2 << " " << y2 << endl << endl;
 
 		Ruutu alkuruutu(x1, y1);
 		Ruutu loppuruutu(x2, y2);
