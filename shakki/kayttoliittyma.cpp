@@ -80,7 +80,7 @@ void Kayttoliittyma::piirraLauta()
 			}
 
 			if (_asema->_lauta[i][j] != NULL) {
-				if (i == 1)
+				if (i == 1) // Mustat sotilaat
 					wcout << " " << _asema->_lauta[i][j]->getUnicode();
 				else
 					wcout << " " << _asema->_lauta[i][j]->getUnicode() << " ";
@@ -111,59 +111,71 @@ Siirto Kayttoliittyma::annaVastustajanSiirto()
 
 	_setmode(_fileno(stdout), _O_U16TEXT);
 
-	string input;
-	cout << "Anna siirto: ";
-	cin >> input;
-
-	if (input == "L0-0" || input == "L0-0-0")
+	while (true)
 	{
-		if (input == "L0-0")
-			return Siirto(true, false);
-		else if (input == "L0-0-0")
-			return Siirto(false, true);
+		string input;
+		cout << "Anna siirto: ";
+		cin >> input;
+
+		if (input == "0")
+		{
+			break;
+		}
+
+		// Lyhyt ja pitkä linna
+		if (input == "L0-0" || input == "L0-0-0")
+		{
+			if (input == "L0-0")
+				return Siirto(true, false);
+			else if (input == "L0-0-0")
+				return Siirto(false, true);
+		}
+
+		if (input.find('K') != std::string::npos)
+			nappulatyyppi = "Kuningas";
+		else if (input.find('D') != std::string::npos)
+			nappulatyyppi = "Daami";
+		else if (input.find('L') != std::string::npos)
+			nappulatyyppi = "Lähetti";
+		else if (input.find('R') != std::string::npos)
+			nappulatyyppi = "Ratsu";
+		else if (input.find('T') != std::string::npos)
+			nappulatyyppi = "Torni";
+		else
+			cout << "Virheellinen siirto. Anna siirto muodossa Rg1-f3" << endl;
+
+		alkuasema = input.substr(1, 2);
+		loppuasema = input.substr(4, 5);
+
+		cout << "Nappulatyyppi: " << nappulatyyppi << "\nNappula :" << alkuasema << " " << loppuasema << endl;
+
+		int x1, y1, x2, y2;
+
+		char c = alkuasema[0];
+		for (int i = 0; i < sizeof(kirjaimet); i++) {
+			if (c == kirjaimet[i])
+				x1 = i;
+		}
+		y1 = std::stoi(alkuasema.substr(2, 3));
+		cout << y1 << endl;
+
+		c = loppuasema[0];
+		for (int i = 0; i < sizeof(kirjaimet); i++) {
+			if (c == kirjaimet[i])
+				x2 = i;
+		}
+		y2 = std::stoi(loppuasema.substr(2, 3));
+
+		Ruutu alkuruutu(x1, y1);
+		Ruutu loppuruutu(x2, y2);
+
+		Siirto siirto(alkuruutu, loppuruutu);
+
+		return siirto;
 	}
 
-	if (input.find('K') != std::string::npos)
-		nappulatyyppi = "Kuningas";
-	else if (input.find('D') != std::string::npos)
-		nappulatyyppi = "Daami";
-	else if (input.find('L') != std::string::npos)
-		nappulatyyppi = "Lähetti";
-	else if (input.find('R') != std::string::npos)
-		nappulatyyppi = "Ratsu";
-	else if (input.find('T') != std::string::npos)
-		nappulatyyppi = "Torni";
-	else
-		cout << "Virheellinen siirto. Anna siirto muodossa Rg1-f3" << endl;
 
-	alkuasema = input.substr(1, 2);
-	loppuasema = input.substr(4, 5);
 
-	cout << "Nappulatyyppi: " << nappulatyyppi << "\nNappula :" << alkuasema << " " << loppuasema << endl;
-
-	int x1, y1, x2, y2;
-	
-	char c = alkuasema[0];
-	for (int i = 0; i < sizeof(kirjaimet); i++) {
-		if (c == kirjaimet[i])
-			x1 = i;
-	}
-	y1 =  std::stoi(alkuasema.substr(2, 3));
-	cout << y1 << endl;
-
-	c = loppuasema[0];
-	for (int i = 0; i < sizeof(kirjaimet); i++) {
-		if (c == kirjaimet[i])
-			x2 = i;
-	}
-	y2 = std::stoi(loppuasema.substr(2, 3));
-	
-	Ruutu alkuruutu(x1, y1);
-	Ruutu loppuruutu(x2, y2);
-
-	Siirto siirto(alkuruutu, loppuruutu);
-
-	return siirto;
 }
 
 

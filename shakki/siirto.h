@@ -2,12 +2,12 @@
 #include "ruutu.h"
 
 // Ns. "forward declaration". Nyt Asema-luokassa voidaa esitell� Nappula-osoittimia ilman,
-// ett� nappula.h -tiedostoa t�ytyy includoida.
+// että nappula.h -tiedostoa täytyy includoida.
 class Nappula; 
 
 
 // Siirto kuvaa nappulan siirtymisen ruudusta toiseen, mukaanlukien erikoissiirrot
-// (linnoitus ja ohestaly�nti).
+// (linnoitus ja ohestalyönti).
 class Siirto
 {
 public:

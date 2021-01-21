@@ -24,7 +24,7 @@ Asema::Asema()
 	// Ensin alustetaan kaikki laudan ruudut nappulla "NULL", koska muuten ruuduissa satunnaista tauhkaa
 	for (int x = 0; x < 8; ++x) {
 		for (int y = 0; y < 8; ++y) {
-			_lauta[x][y] = nullptr;
+			_lauta[x][y] = NULL;
 		}
 	}
 
@@ -68,34 +68,95 @@ Asema::Asema()
 
 void Asema::paivitaAsema(Siirto *siirto)
 {
-
 	// Kaksoisaskel-lippu on oletusarvoisesti pois päältä.
 	// Asetetaan myöhemmin, jos tarvii.
+	kaksoisaskelSarakkeella = -1;
 
 
 	//Tarkastetaan on siirto lyhyt linna
-
+	if (siirto->onkoLyhytLinna())
+	{
+		if (_siirtovuoro == 0) {
+			_lauta[4][0] = NULL; // kuninkaan paikka tyhjä
+			_lauta[6][0] = vk; // kuninkaan uusi paikka
+			_lauta[7][0] = NULL; // tornin paikka tyhjä
+			_lauta[5][0] = vt; // tornin uusi paikka
+		}
+		if (_siirtovuoro == 1) {
+			_lauta[4][7] = NULL; // kuninkaan paikka tyhjä
+			_lauta[6][7] = mk; // kuninkaan uusi paikka
+			_lauta[7][7] = NULL; // tornin paikka tyhjä
+			_lauta[5][7] = mt; // tornin uusi paikka
+		}
+	}
 
 	// Onko pitkä linna
+	if (siirto->onkoPitkalinna())
+	{
+		if (_siirtovuoro == 0) {
+			_lauta[4][0] = NULL; // kuninkaan paikka tyhjä
+			_lauta[2][0] = vk; // kuninkaan uusi paikka
+			_lauta[0][0] = NULL; // tornin paikka tyhjä
+			_lauta[3][0] = vt; // tornin uusi paikka
+		}
+		if (_siirtovuoro == 1) {
+			_lauta[4][7] = NULL; // kuninkaan paikka tyhjä
+			_lauta[2][7] = mk; // kuninkaan uusi paikka
+			_lauta[0][7] = NULL; // tornin paikka tyhjä
+			_lauta[3][7] = mt; // tornin uusi paikka
+		}
+	}
 
+	else
+	{
+		// Kaikki muut siirrot
 
+		Ruutu* alkuRuutu = &siirto->getAlkuruutu();
+		Ruutu* loppuRuutu = &siirto->getLoppuruutu();
 
-	// Kaikki muut siirrot
-
+		int x = alkuRuutu->getSarake();
+		int y = alkuRuutu->getRivi();
 
 		//Ottaa siirron alkuruudussa olleen nappulan talteen 
-
+		Nappula* nappula = _lauta[x][y];
+		_lauta[x][y] = NULL;
 
 		//Laittaa talteen otetun nappulan uuteen ruutuun
+		// Tarkistetaan oliko sotilaan kaksoisaskel (asetetaan kaksoisaskel-lippu)
+		if (nappula->getKoodi() == 0) // VT
+			_lauta[loppuRuutu->getSarake()][loppuRuutu->getRivi()] = vt;
+		else if (nappula->getKoodi() == 1) // VR
+			_lauta[loppuRuutu->getSarake()][loppuRuutu->getRivi()] = vr;
+		else if (nappula->getKoodi() == 2) // VL
+			_lauta[loppuRuutu->getSarake()][loppuRuutu->getRivi()] = vl;
+		else if (nappula->getKoodi() == 3) // VD
+			_lauta[loppuRuutu->getSarake()][loppuRuutu->getRivi()] = vd;
+		else if (nappula->getKoodi() == 4) // VK
+			_lauta[loppuRuutu->getSarake()][loppuRuutu->getRivi()] = vk;
+		else if (nappula->getKoodi() == 5) {// VS
+			_lauta[loppuRuutu->getSarake()][loppuRuutu->getRivi()] = vs;
+			kaksoisaskelSarakkeella = 0;
+		}
+		else if (nappula->getKoodi() == 6) // MT
+			_lauta[loppuRuutu->getSarake()][loppuRuutu->getRivi()] = mt;
+		else if (nappula->getKoodi() == 7) // MR
+			_lauta[loppuRuutu->getSarake()][loppuRuutu->getRivi()] = mr;
+		else if (nappula->getKoodi() == 8) // ML
+			_lauta[loppuRuutu->getSarake()][loppuRuutu->getRivi()] = ml;
+		else if (nappula->getKoodi() == 9) // MD
+			_lauta[loppuRuutu->getSarake()][loppuRuutu->getRivi()] = md;
+		else if (nappula->getKoodi() == 10) // MK
+			_lauta[loppuRuutu->getSarake()][loppuRuutu->getRivi()] = mk;
+		else if (nappula->getKoodi() == 11) {// MS
+			_lauta[loppuRuutu->getSarake()][loppuRuutu->getRivi()] = ms;
+			kaksoisaskelSarakkeella = 0;
+		}
 
-
-		// Tarkistetaan oliko sotilaan kaksoisaskel
-		// (asetetaan kaksoisaskel-lippu)
-
-		// Ohestaly�nti on tyhjään ruutuun. Vieressä oleva (sotilas) poistetaan.
+		// Ohestalyönti on tyhjään ruutuun. Vieressä oleva (sotilas) poistetaan.
 
 		//// Katsotaan jos nappula on sotilas ja rivi on päätyrivi niin ei vaihdeta nappulaa 
 		////eli alkuruutuun laitetaan null ja loppuruudussa on jo kliittymän laittama nappula MIIKKA, ei taida minmaxin kanssa hehkua?
+
 
 		//
 		////muissa tapauksissa alkuruutuun null ja loppuruutuun sama alkuruudusta l�htenyt nappula
@@ -105,6 +166,7 @@ void Asema::paivitaAsema(Siirto *siirto)
 		// katsotaan jos liikkunut nappula on torni niin muutetaan onkoTorniLiikkunut arvo (molemmille väreille ja molemmille torneille)
 
 	//päivitetään _siirtovuoro
+	}
 
 }
 
@@ -161,7 +223,7 @@ bool Asema::getOnkoMustaKTliikkunut()
 /* 1. Laske nappuloiden arvo
 Daami = 9
 Torni = 5
-L�hetti = 3,25
+Lähetti = 3,25
 Ratsu = 3
 Sotilas = 1
 

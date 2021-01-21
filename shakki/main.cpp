@@ -29,12 +29,14 @@ int main()
 		Kayttoliittyma::getInstance()->piirraLauta();
 		wcout << "\n";
 		// Tarkasta onko peli loppu?
+
 		asema.annaLaillisetSiirrot(lista);
+		
 		if (lista.size() == 0) {
 			lopetus = 0;
-			std::wcout << "Peli loppui";
+			std::wcout << "\nPeli loppui";
 			continue;
-		}
+
 		Siirto siirto;
 		if (asema.getSiirtovuoro() == koneenVari) {
 			MinMaxPaluu paluu;
@@ -50,6 +52,7 @@ int main()
 			siirto = Kayttoliittyma::getInstance()->
 				annaVastustajanSiirto();
 		}
+		Kayttoliittyma::getInstance()->annaVastustajanSiirto();
 		asema.paivitaAsema(&siirto);
 	}
 	

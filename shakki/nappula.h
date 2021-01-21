@@ -54,7 +54,7 @@ public:
 	void annaSiirrot(std::list<Siirto>& lista, Ruutu*, Asema*, int vari);
 };
 
-// L�hetti-aliluokka. Virtuaalinen perintä tarkoittaa, että kantaluokka peritän moniperinnässä vain kerran
+// Lähetti-aliluokka. Virtuaalinen perintä tarkoittaa, että kantaluokka peritän moniperinnässä vain kerran
 // (koska daami perii sekä tornin että lähetin).
 class Lahetti : public virtual Nappula {
 public:
