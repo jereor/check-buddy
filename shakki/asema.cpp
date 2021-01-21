@@ -121,34 +121,37 @@ void Asema::paivitaAsema(Siirto *siirto)
 		Nappula* nappula = _lauta[x][y];
 		_lauta[x][y] = NULL;
 
+		x = loppuRuutu->getSarake();
+		y = loppuRuutu->getRivi();
+
 		//Laittaa talteen otetun nappulan uuteen ruutuun
 		// Tarkistetaan oliko sotilaan kaksoisaskel (asetetaan kaksoisaskel-lippu)
 		if (nappula->getKoodi() == 0) // VT
-			_lauta[loppuRuutu->getSarake()][loppuRuutu->getRivi()] = vt;
+			_lauta[x][y] = vt;
 		else if (nappula->getKoodi() == 1) // VR
-			_lauta[loppuRuutu->getSarake()][loppuRuutu->getRivi()] = vr;
+			_lauta[x][y] = vr;
 		else if (nappula->getKoodi() == 2) // VL
-			_lauta[loppuRuutu->getSarake()][loppuRuutu->getRivi()] = vl;
+			_lauta[x][y] = vl;
 		else if (nappula->getKoodi() == 3) // VD
-			_lauta[loppuRuutu->getSarake()][loppuRuutu->getRivi()] = vd;
+			_lauta[x][y] = vd;
 		else if (nappula->getKoodi() == 4) // VK
-			_lauta[loppuRuutu->getSarake()][loppuRuutu->getRivi()] = vk;
+			_lauta[x][y] = vk;
 		else if (nappula->getKoodi() == 5) {// VS
-			_lauta[loppuRuutu->getSarake()][loppuRuutu->getRivi()] = vs;
+			_lauta[x][y] = vs;
 			kaksoisaskelSarakkeella = 0;
 		}
 		else if (nappula->getKoodi() == 6) // MT
-			_lauta[loppuRuutu->getSarake()][loppuRuutu->getRivi()] = mt;
+			_lauta[x][y] = mt;
 		else if (nappula->getKoodi() == 7) // MR
-			_lauta[loppuRuutu->getSarake()][loppuRuutu->getRivi()] = mr;
+			_lauta[x][y] = mr;
 		else if (nappula->getKoodi() == 8) // ML
-			_lauta[loppuRuutu->getSarake()][loppuRuutu->getRivi()] = ml;
+			_lauta[x][y] = ml;
 		else if (nappula->getKoodi() == 9) // MD
-			_lauta[loppuRuutu->getSarake()][loppuRuutu->getRivi()] = md;
+			_lauta[x][y] = md;
 		else if (nappula->getKoodi() == 10) // MK
-			_lauta[loppuRuutu->getSarake()][loppuRuutu->getRivi()] = mk;
+			_lauta[x][y] = mk;
 		else if (nappula->getKoodi() == 11) {// MS
-			_lauta[loppuRuutu->getSarake()][loppuRuutu->getRivi()] = ms;
+			_lauta[x][y] = ms;
 			kaksoisaskelSarakkeella = 0;
 		}
 
