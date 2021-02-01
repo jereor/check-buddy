@@ -3,7 +3,6 @@
 #include <string>
 #include <fcntl.h>
 #include <io.h>
-#include <iostream>
 #include "kayttoliittyma.h"
 
 using namespace std;

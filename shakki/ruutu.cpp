@@ -6,6 +6,12 @@ Ruutu::Ruutu(int sarake, int rivi)
 	setSarake(sarake);
 }
 
+Ruutu::Ruutu()
+{
+	setRivi(0);
+	setSarake(0);
+}
+
 
 int Ruutu::getRivi()
 {
