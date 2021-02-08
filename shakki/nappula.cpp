@@ -212,7 +212,8 @@ void Lahetti::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, 
 
 void Daami::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, int vari)
 {
-	
+	Torni::annaSiirrot(lista, ruutu, asema, vari);
+	Lahetti::annaSiirrot(lista, ruutu, asema, vari);
 }
 
 
@@ -223,7 +224,79 @@ void Kuningas::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema,
 
 	Kaikki muu kuninkaaseen liittyvä tarkistus tehd��n eri paikassa*/
 
+	if (vari == 0) {
+		// Eteenpäin
+		if (ruutu->getRivi() + 1 < 8) {
+			if (asema->_lauta[ruutu->getRivi() + 1][ruutu->getSarake()] == NULL
+				|| asema->_lauta[ruutu->getRivi() + 1][ruutu->getSarake()]->getVari() == 1) {
+				lisaaListalle(ruutu->getRivi(), ruutu->getSarake(), ruutu->getRivi() + 1, ruutu->getSarake(), lista);
+			}
+		}
 
+		// Oikealle
+		if (ruutu->getSarake() + 1 < 8) {
+			if (asema->_lauta[ruutu->getRivi()][ruutu->getSarake() + 1] == NULL
+				|| asema->_lauta[ruutu->getRivi()][ruutu->getSarake() + 1]->getVari() == 1) {
+				lisaaListalle(ruutu->getRivi(), ruutu->getSarake(), ruutu->getRivi(), ruutu->getSarake() + 1, lista);
+			}
+		}
+
+		// Taakse
+		if (ruutu->getRivi() - 1 < 8) {
+			if (asema->_lauta[ruutu->getRivi() - 1][ruutu->getSarake()] == NULL
+				|| asema->_lauta[ruutu->getRivi() - 1][ruutu->getSarake()]->getVari() == 1) {
+				lisaaListalle(ruutu->getRivi(), ruutu->getSarake(), ruutu->getRivi() - 1, ruutu->getSarake() + 1, lista);
+			}
+		}
+
+		// Vasemmalle
+		if (ruutu->getSarake() - 1 < 8) {
+			if (asema->_lauta[ruutu->getRivi()][ruutu->getSarake() - 1] == NULL
+				|| asema->_lauta[ruutu->getRivi()][ruutu->getSarake() - 1]->getVari() == 1) {
+				lisaaListalle(ruutu->getRivi(), ruutu->getSarake(), ruutu->getRivi(), ruutu->getSarake() - 1, lista);
+			}
+		}
+
+		// Ylös oikealle
+		if (ruutu->getRivi() + 1 < 8) {
+			if (ruutu->getSarake() + 1 < 8) {
+				if (asema->_lauta[ruutu->getRivi() + 1][ruutu->getSarake() + 1] == NULL
+					|| asema->_lauta[ruutu->getRivi() + 1][ruutu->getSarake() + 1]->getVari() == 1) {
+					lisaaListalle(ruutu->getRivi(), ruutu->getSarake(), ruutu->getRivi() + 1, ruutu->getSarake() + 1, lista);
+				}
+			}
+		}
+
+		// Alas oikealle
+		if (ruutu->getRivi() - 1 >= 0) {
+			if (ruutu->getSarake() + 1 < 8) {
+				if (asema->_lauta[ruutu->getRivi() - 1][ruutu->getSarake() + 1] == NULL
+					|| asema->_lauta[ruutu->getRivi() - 1][ruutu->getSarake() + 1]->getVari() == 1) {
+					lisaaListalle(ruutu->getRivi(), ruutu->getSarake(), ruutu->getRivi() - 1, ruutu->getSarake() + 1, lista);
+				}
+			}
+		}
+
+		// Alas vasemmalle
+		if (ruutu->getRivi() - 1 >= 0) {
+			if (ruutu->getSarake() - 1 >= 0) {
+				if (asema->_lauta[ruutu->getRivi() - 1][ruutu->getSarake() - 1] == NULL
+					|| asema->_lauta[ruutu->getRivi() - 1][ruutu->getSarake() - 1]->getVari() == 1) {
+					lisaaListalle(ruutu->getRivi(), ruutu->getSarake(), ruutu->getRivi() - 1, ruutu->getSarake() - 1, lista);
+				}
+			}
+		}
+
+		// Ylös vasemmalle
+		if (ruutu->getRivi() + 1 < 8) {
+			if (ruutu->getSarake() - 1 >= 0) {
+				if (asema->_lauta[ruutu->getRivi() + 1][ruutu->getSarake() - 1] == NULL
+					|| asema->_lauta[ruutu->getRivi() + 1][ruutu->getSarake() - 1]->getVari() == 1) {
+					lisaaListalle(ruutu->getRivi(), ruutu->getSarake(), ruutu->getRivi() + 1, ruutu->getSarake() - 1, lista);
+				}
+			}
+		}
+	}
 	
 }
 
@@ -232,14 +305,81 @@ void Sotilas::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, 
 {
 	int rivi = ruutu->getRivi();
 	int sarake = ruutu->getSarake();
+	int lahtoruudunNappulanVari = asema->_lauta[rivi][sarake]->getVari();
+	int tuloruudunNappulanVari;
 
-	int lahtoRuudunNappulanVari;
-	int lahtoRuudunNappulanVari;
+	// TODO: Kaksoisaskeleen tarkistus!
 
+	// VALKOINEN
+	if (vari == 0) {
+		if (rivi)
+		// Siirto suoraan eteenpäin
+		if (rivi + 1 < 8) {
+			if (asema->_lauta[rivi + 1][sarake] == NULL) {
+				lista.push_back(Siirto(*ruutu, Ruutu(sarake, rivi + 1)));
+			}
+		}
 
+		// Ohestalyönti oikealle
+		if (rivi + 1 < 8) {
+			if (sarake + 1 < 8) {
+				if (asema->_lauta[rivi + 1][sarake + 1] != NULL) {
+					lista.push_back(Siirto(*ruutu, Ruutu(sarake + 1, rivi + 1)));
+				}
+			}
+		}
+
+		// Ohestalyönti vasemmalle
+		if (rivi - 1 >= 0) {
+			if (sarake + 1 < 8) {
+				if (asema->_lauta[rivi + 1][sarake - 1] != NULL) {
+					lista.push_back(Siirto(*ruutu, Ruutu(sarake - 1, rivi + 1)));
+				}
+			}
+		}
+	}
+
+	// MUSTA
+	if (vari == 1) {
+		// Siirto suoraan eteenpäin
+		if (rivi - 1 >= 0) {
+			if (asema->_lauta[rivi - 1][sarake] == NULL) {
+				lista.push_back(Siirto(*ruutu, Ruutu(sarake, rivi - 1)));
+			}
+		}
+
+		// Ohestalyönti oikealle
+		if (rivi - 1 >= 0) {
+			if (sarake + 1 < 8) {
+				if (asema->_lauta[rivi - 1][sarake + 1] != NULL) {
+					lista.push_back(Siirto(*ruutu, Ruutu(sarake + 1, rivi - 1)));
+				}
+			}
+		}
+
+		// Ohestalyönti vasemmalle
+		if (rivi - 1 >= 0) {
+			if (sarake - 1 >= 0) {
+				if (asema->_lauta[rivi - 1][sarake - 1] != NULL) {
+					lista.push_back(Siirto(*ruutu, Ruutu(sarake - 1, rivi - 1)));
+				}
+			}
+		}
+	}
 }
 
 
 void Sotilas::lisaaSotilaanKorotukset(Siirto* siirto, std::list<Siirto>& lista, Asema* asema) {
 	
+}
+
+void lisaaListalle(int alkuY, int alkuX, int loppuY, int loppuX, list<Siirto>& lista) {
+	int alkuruutuX = alkuX;
+	int alkuruutuY = alkuY;
+	int loppuruutuX = loppuX;
+	int loppuruutuY = loppuY;
+	Ruutu lahtoruutu(alkuruutuX, alkuruutuY);
+	Ruutu loppuruutu(loppuruutuX, loppuruutuY);
+	Siirto siirto(lahtoruutu, loppuruutu);
+	lista.push_back(siirto);
 }
