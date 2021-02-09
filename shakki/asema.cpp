@@ -111,54 +111,68 @@ void Asema::paivitaAsema(Siirto *siirto)
 	{
 		// Kaikki muut siirrot
 
-		Ruutu* alkuRuutu = &siirto->getAlkuruutu();
-		Ruutu* loppuRuutu = &siirto->getLoppuruutu();
+		Ruutu* alkuruutu = &siirto->getAlkuruutu();
+		Ruutu* loppuruutu = &siirto->getLoppuruutu();
 
-		int x = alkuRuutu->getSarake();
-		int y = alkuRuutu->getRivi();
+		// Ottaa siirron alkuruudussa olleen nappulan talteen 
+		int x1 = alkuruutu->getSarake();
+		int y1 = alkuruutu->getRivi();
+		int x2 = loppuruutu->getSarake();
+		int y2 = loppuruutu->getRivi();
+		Nappula* nappula = _lauta[x1][y1];
+		_lauta[x1][y1] = NULL;
+		// Ja laittaa talteen otetun nappulan uuteen ruutuun
+		_lauta[x2][y2] = nappula;
 
-		//Ottaa siirron alkuruudussa olleen nappulan talteen 
-		Nappula* nappula = _lauta[x][y];
-		_lauta[x][y] = NULL;
-
-		x = loppuRuutu->getSarake();
-		y = loppuRuutu->getRivi();
-
-		//Laittaa talteen otetun nappulan uuteen ruutuun
-		// Tarkistetaan oliko sotilaan kaksoisaskel (asetetaan kaksoisaskel-lippu)
-		if (nappula->getKoodi() == 0) // VT
-			_lauta[x][y] = vt;
-		else if (nappula->getKoodi() == 1) // VR
-			_lauta[x][y] = vr;
-		else if (nappula->getKoodi() == 2) // VL
-			_lauta[x][y] = vl;
-		else if (nappula->getKoodi() == 3) // VD
-			_lauta[x][y] = vd;
-		else if (nappula->getKoodi() == 4) // VK
-			_lauta[x][y] = vk;
-		else if (nappula->getKoodi() == 5) {// VS
-			_lauta[x][y] = vs;
-			kaksoisaskelSarakkeella = 0;
+		if (_lauta[x2][y2]->getKoodi() == MK) {
+			_onkoMustaKuningasLiikkunut = true;
 		}
-		else if (nappula->getKoodi() == 6) // MT
-			_lauta[x][y] = mt;
-		else if (nappula->getKoodi() == 7) // MR
-			_lauta[x][y] = mr;
-		else if (nappula->getKoodi() == 8) // ML
-			_lauta[x][y] = ml;
-		else if (nappula->getKoodi() == 9) // MD
-			_lauta[x][y] = md;
-		else if (nappula->getKoodi() == 10) // MK
-			_lauta[x][y] = mk;
-		else if (nappula->getKoodi() == 11) {// MS
-			_lauta[x][y] = ms;
-			kaksoisaskelSarakkeella = 0;
+		if (_lauta[x2][y2]->getKoodi() == VK) {
+			_onkoValkeaKuningasLiikkunut = true;
+		}
+		if (_lauta[x2][y2]->getKoodi() == VT && _lauta[0][0] == NULL) {
+			_onkoValkeaDTliikkunut = true;
+		}
+		if (_lauta[x2][y2]->getKoodi() == VT && _lauta[0][7] == NULL) {
+			_onkoValkeaKTliikkunut = true;
+		}
+		if (_lauta[x2][y2]->getKoodi() == MT && _lauta[7][0] == NULL) {
+			_onkoMustaDTliikkunut = true;
+		}
+		if (_lauta[x2][y2]->getKoodi() == MK && _lauta[7][7] == NULL) {
+			_onkoMustaKTliikkunut = true;
+		}
+		if (_lauta[x2][y2]->getKoodi() == MS && alkuruutu->getRivi() - loppuruutu->getRivi() == 2) {
+			kaksoisaskelSarakkeella = 1;
+		}
+		if (_lauta[x2][y2]->getKoodi() == VS && loppuruutu->getRivi() - alkuruutu->getRivi() == 2) {
+			kaksoisaskelSarakkeella = 1;
 		}
 
 		// Ohestalyönti on tyhjään ruutuun. Vieressä oleva (sotilas) poistetaan.
+		if (kaksoisaskelSarakkeella != -1) {
+			
+			// Valkoinen
+			if (_siirtovuoro == 0) {
+				if (_lauta[x2][y2]->getKoodi() == VS
+					&& _lauta[x2][y2 - 1]->getKoodi() == MS)
+				{
+					_lauta[x2][y2 - 1] = NULL; // Valkoinen söi mustan
+				}
+			}
+
+			// Musta
+			else if (_siirtovuoro == 1) {
+				if (_lauta[x2][y2]->getKoodi() == MS
+					&& _lauta[x2][y2 + 1]->getKoodi() == VS)
+				{
+					_lauta[x2][y2 + 1] = NULL; // Musta söi valkoisen
+				}
+			}
+		}
 
 		//// Katsotaan jos nappula on sotilas ja rivi on päätyrivi niin ei vaihdeta nappulaa 
-		////eli alkuruutuun laitetaan null ja loppuruudussa on jo kliittymän laittama nappula MIIKKA, ei taida minmaxin kanssa hehkua?
+		////eli alkuruutuun laitetaan null ja loppuruudussa on jo kliittymän laittama nappula
 
 
 		//
@@ -370,14 +384,34 @@ bool Asema::onkoRuutuUhattu(Ruutu* ruutu, int vastustajanVari)
 	return false;
 }
 
-
 void Asema::huolehdiKuninkaanShakeista(std::list<Siirto>& lista, int vari) 
 { 
 	
 }
 
+void Asema::annaLinnoitusSiirrot(std::list<Siirto>& lista, int vari)
+{
+	if (vari == 0)
+	{
+		// Lyhyt
+		if (!this->getOnkoValkeaKuningasLiikkunut() && !this->getOnkoValkeaKTliikkunut()
+			&& this->onkoRuutuUhattu(&Ruutu(0, 4), !vari) && this->onkoRuutuUhattu(&Ruutu(0, 5), !vari) && this->onkoRuutuUhattu(&Ruutu(0, 6), !vari)
+			&& this->_lauta[0][5] == NULL && this->_lauta[6][0] == NULL)
+		{
+			lista.push_back(Siirto(true, false));
+		}
+		// Pitkä
+		if (!this->getOnkoValkeaKuningasLiikkunut() && !this->getOnkoValkeaDTliikkunut()
+			&& this->onkoRuutuUhattu(&Ruutu(0, 4), !vari) && this->onkoRuutuUhattu(&Ruutu(0, 3), !vari) && this->onkoRuutuUhattu(&Ruutu(0, 3), !vari)
+			&& this->_lauta[0][3] == NULL && this->_lauta[2][0] == NULL)
+		{
+			lista.push_back(Siirto(false, true));
+		}
+	}
+}
 
-void Asema::annaLaillisetSiirrot(std::list<Siirto>& lista) {
+void Asema::annaLaillisetSiirrot(std::list<Siirto>& lista) 
+{
 	int vari = this->getSiirtovuoro();
 
 	for (int i = 0; i < 8; i++) {
