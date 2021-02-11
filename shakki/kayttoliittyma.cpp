@@ -79,7 +79,7 @@ void Kayttoliittyma::piirraLauta()
 			}
 
 			if (_asema->_lauta[i][j] != NULL) {
-				if (i == 1) // Mustat sotilaat
+				if (i == 6) // Mustat sotilaat
 					wcout << " " << _asema->_lauta[i][j]->getUnicode();
 				else
 					wcout << " " << _asema->_lauta[i][j]->getUnicode() << " ";

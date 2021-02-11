@@ -15,6 +15,17 @@ Nappula::Nappula(wstring unicode, int vari, int koodi)
 	_koodi = koodi;
 }
 
+void Nappula::lisaaListalle(int alkuY, int alkuX, int loppuY, int loppuX, list<Siirto>& lista) {
+	int alkuruutuX = alkuX;
+	int alkuruutuY = alkuY;
+	int loppuruutuX = loppuX;
+	int loppuruutuY = loppuY;
+	Ruutu lahtoruutu(alkuruutuX, alkuruutuY);
+	Ruutu loppuruutu(loppuruutuX, loppuruutuY);
+	Siirto siirto(lahtoruutu, loppuruutu);
+	lista.push_back(siirto);
+}
+
 
 void Torni::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, int vari)
 {
@@ -305,17 +316,15 @@ void Sotilas::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, 
 {
 	int rivi = ruutu->getRivi();
 	int sarake = ruutu->getSarake();
-	int lahtoruudunNappulanVari = asema->_lauta[rivi][sarake]->getVari();
-	int tuloruudunNappulanVari;
-
-	// TODO: Kaksoisaskeleen tarkistus!
 
 	// VALKOINEN
 	if (vari == 0) {
-		if (rivi)
 		// Siirto suoraan eteenpäin
 		if (rivi + 1 < 8) {
-			if (asema->_lauta[rivi + 1][sarake] == NULL) {
+			if (rivi == 1 && asema->_lauta[sarake][rivi + 2] == NULL) {
+				lista.push_back(Siirto(*ruutu, Ruutu(sarake, rivi + 2)));
+			}
+			if (asema->_lauta[sarake][rivi + 1] == NULL) {
 				lista.push_back(Siirto(*ruutu, Ruutu(sarake, rivi + 1)));
 			}
 		}
@@ -323,7 +332,7 @@ void Sotilas::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, 
 		// Ohestalyönti oikealle
 		if (rivi + 1 < 8) {
 			if (sarake + 1 < 8) {
-				if (asema->_lauta[rivi + 1][sarake + 1] != NULL) {
+				if (asema->_lauta[sarake + 1][rivi + 1] != NULL) { 
 					lista.push_back(Siirto(*ruutu, Ruutu(sarake + 1, rivi + 1)));
 				}
 			}
@@ -332,7 +341,7 @@ void Sotilas::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, 
 		// Ohestalyönti vasemmalle
 		if (rivi - 1 >= 0) {
 			if (sarake + 1 < 8) {
-				if (asema->_lauta[rivi + 1][sarake - 1] != NULL) {
+				if (asema->_lauta[sarake - 1][rivi + 1] != NULL) {
 					lista.push_back(Siirto(*ruutu, Ruutu(sarake - 1, rivi + 1)));
 				}
 			}
@@ -343,6 +352,9 @@ void Sotilas::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, 
 	if (vari == 1) {
 		// Siirto suoraan eteenpäin
 		if (rivi - 1 >= 0) {
+			if (rivi == 6 && asema->_lauta[sarake][rivi - 2] == NULL) {
+				lista.push_back(Siirto(*ruutu, Ruutu(sarake, rivi - 2)));
+			}
 			if (asema->_lauta[rivi - 1][sarake] == NULL) {
 				lista.push_back(Siirto(*ruutu, Ruutu(sarake, rivi - 1)));
 			}
@@ -371,15 +383,4 @@ void Sotilas::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, 
 
 void Sotilas::lisaaSotilaanKorotukset(Siirto* siirto, std::list<Siirto>& lista, Asema* asema) {
 	
-}
-
-void lisaaListalle(int alkuY, int alkuX, int loppuY, int loppuX, list<Siirto>& lista) {
-	int alkuruutuX = alkuX;
-	int alkuruutuY = alkuY;
-	int loppuruutuX = loppuX;
-	int loppuruutuY = loppuY;
-	Ruutu lahtoruutu(alkuruutuX, alkuruutuY);
-	Ruutu loppuruutu(loppuruutuX, loppuruutuY);
-	Siirto siirto(lahtoruutu, loppuruutu);
-	lista.push_back(siirto);
 }

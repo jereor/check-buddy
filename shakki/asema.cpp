@@ -30,39 +30,39 @@ Asema::Asema()
 
 	// Asetetaan alkuaseman mukaisesti nappulat ruuduille
 
-	_lauta[0][0] = mt; // Musta Torni
-	_lauta[0][1] = mr; // Musta Ratsu
-	_lauta[0][2] = ml; // Musta Lähetti
-	_lauta[0][3] = mk; // Musta Kuningas
-	_lauta[0][4] = md; // Musta Daami
-	_lauta[0][5] = ml; // Musta Lähetti
-	_lauta[0][6] = mr; // Musta Ratsu
-	_lauta[0][7] = mt; // Musta Torni
-	_lauta[1][0] = ms; // Musta Sotilas
-	_lauta[1][1] = ms; // Musta Sotilas
-	_lauta[1][2] = ms; // Musta Sotilas
-	_lauta[1][3] = ms; // Musta Sotilas
-	_lauta[1][4] = ms; // Musta Sotilas
-	_lauta[1][5] = ms; // Musta Sotilas
-	_lauta[1][6] = ms; // Musta Sotilas
-	_lauta[1][7] = ms; // Musta Sotilas
+	_lauta[0][0] = vt; // Val. Torni
+	_lauta[0][1] = vr; // Val. Ratsu
+	_lauta[0][2] = vl; // Val. Lähetti
+	_lauta[0][3] = vk; // Val. Kuningas
+	_lauta[0][4] = vd; // Val. Daami
+	_lauta[0][5] = vl; // Val. Lähetti
+	_lauta[0][6] = vr; // Val. Ratsu
+	_lauta[0][7] = vt; // Val. Torni
+	_lauta[1][0] = vs; // Val. Sotilas
+	_lauta[1][1] = vs; // Val. Sotilas
+	_lauta[1][2] = vs; // Val. Sotilas
+	_lauta[1][3] = vs; // Val. Sotilas
+	_lauta[1][4] = vs; // Val. Sotilas
+	_lauta[1][5] = vs; // Val. Sotilas
+	_lauta[1][6] = vs; // Val. Sotilas
+	_lauta[1][7] = vs; // Val. Sotilas
 
-	_lauta[7][0] = vt; // Val. Torni
-	_lauta[7][1] = vr; // Val. Ratsu
-	_lauta[7][2] = vl; // Val. Lähetti
-	_lauta[7][3] = vk; // Val. Kuningas
-	_lauta[7][4] = vd; // Val. Daami
-	_lauta[7][5] = vl; // Val. Lähetti
-	_lauta[7][6] = vr; // Val. Ratsu
-	_lauta[7][7] = vt; // Val. Torni
-	_lauta[6][0] = vs; // Val. Sotilas
-	_lauta[6][1] = vs; // Val. Sotilas
-	_lauta[6][2] = vs; // Val. Sotilas
-	_lauta[6][3] = vs; // Val. Sotilas
-	_lauta[6][4] = vs; // Val. Sotilas
-	_lauta[6][5] = vs; // Val. Sotilas
-	_lauta[6][6] = vs; // Val. Sotilas
-	_lauta[6][7] = vs; // Val. Sotilas
+	_lauta[7][0] = mt; // Musta Torni
+	_lauta[7][1] = mr; // Musta Ratsu
+	_lauta[7][2] = ml; // Musta Lähetti
+	_lauta[7][3] = mk; // Musta Kuningas
+	_lauta[7][4] = md; // Musta Daami
+	_lauta[7][5] = ml; // Musta Lähetti
+	_lauta[7][6] = mr; // Musta Ratsu
+	_lauta[7][7] = mt; // Musta Torni
+	_lauta[6][0] = ms; // Musta Sotilas
+	_lauta[6][1] = ms; // Musta Sotilas
+	_lauta[6][2] = ms; // Musta Sotilas
+	_lauta[6][3] = ms; // Musta Sotilas
+	_lauta[6][4] = ms; // Musta Sotilas
+	_lauta[6][5] = ms; // Musta Sotilas
+	_lauta[6][6] = ms; // Musta Sotilas
+	_lauta[6][7] = ms; // Musta Sotilas
 }
 
 
@@ -119,33 +119,33 @@ void Asema::paivitaAsema(Siirto *siirto)
 		int y1 = alkuruutu->getRivi();
 		int x2 = loppuruutu->getSarake();
 		int y2 = loppuruutu->getRivi();
-		Nappula* nappula = _lauta[x1][y1];
+		Nappula* nappula = _lauta[x1][y1]; // Voi olla että ei saa olla pointteri!!
 		_lauta[x1][y1] = NULL;
 		// Ja laittaa talteen otetun nappulan uuteen ruutuun
 		_lauta[x2][y2] = nappula;
 
-		if (_lauta[x2][y2]->getKoodi() == MK) {
+		if (nappula->getKoodi() == MK) {
 			_onkoMustaKuningasLiikkunut = true;
 		}
-		if (_lauta[x2][y2]->getKoodi() == VK) {
+		if (nappula->getKoodi() == VK) {
 			_onkoValkeaKuningasLiikkunut = true;
 		}
-		if (_lauta[x2][y2]->getKoodi() == VT && _lauta[0][0] == NULL) {
+		if (nappula->getKoodi() == VT && _lauta[0][0] == NULL) {
 			_onkoValkeaDTliikkunut = true;
 		}
-		if (_lauta[x2][y2]->getKoodi() == VT && _lauta[0][7] == NULL) {
+		if (nappula->getKoodi() == VT && _lauta[0][7] == NULL) {
 			_onkoValkeaKTliikkunut = true;
 		}
-		if (_lauta[x2][y2]->getKoodi() == MT && _lauta[7][0] == NULL) {
+		if (nappula->getKoodi() == MT && _lauta[7][0] == NULL) {
 			_onkoMustaDTliikkunut = true;
 		}
-		if (_lauta[x2][y2]->getKoodi() == MK && _lauta[7][7] == NULL) {
+		if (nappula->getKoodi() == MK && _lauta[7][7] == NULL) {
 			_onkoMustaKTliikkunut = true;
 		}
-		if (_lauta[x2][y2]->getKoodi() == MS && alkuruutu->getRivi() - loppuruutu->getRivi() == 2) {
+		if (nappula->getKoodi() == MS && alkuruutu->getRivi() - loppuruutu->getRivi() == 2) {
 			kaksoisaskelSarakkeella = 1;
 		}
-		if (_lauta[x2][y2]->getKoodi() == VS && loppuruutu->getRivi() - alkuruutu->getRivi() == 2) {
+		if (nappula->getKoodi() == VS && loppuruutu->getRivi() - alkuruutu->getRivi() == 2) {
 			kaksoisaskelSarakkeella = 1;
 		}
 

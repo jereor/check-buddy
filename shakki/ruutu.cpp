@@ -2,14 +2,14 @@
 
 Ruutu::Ruutu(int sarake, int rivi)
 {
-	setRivi(rivi);
 	setSarake(sarake);
+	setRivi(rivi);
 }
 
 Ruutu::Ruutu()
 {
-	setRivi(0);
 	setSarake(0);
+	setRivi(0);
 }
 
 

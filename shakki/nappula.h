@@ -4,6 +4,7 @@
 #include <string>
 #include "asema.h"
 #include "siirto.h"
+using namespace std;
 
 
 // Vakioarvot nappulatyypeille.
@@ -37,6 +38,7 @@ public:
 	int getVari()							{ return _vari;					}
 	int getKoodi()							{ return _koodi;				}
 	void setKoodi(int koodi)				{ _koodi = koodi;				}
+	void lisaaListalle(int, int, int, int, list<Siirto>&);
 };
 
 // Torni-aliluokka. Virtuaalinen perintä tarkoittaa, ett� kantaluokka peritään moniperinnässä vain kerran
