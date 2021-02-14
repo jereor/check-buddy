@@ -139,7 +139,7 @@ void Asema::paivitaAsema(Siirto *siirto)
 		if (nappula->getKoodi() == MT && _lauta[7][0] == NULL) {
 			_onkoMustaDTliikkunut = true;
 		}
-		if (nappula->getKoodi() == MK && _lauta[7][7] == NULL) {
+		if (nappula->getKoodi() == MT && _lauta[7][7] == NULL) {
 			_onkoMustaKTliikkunut = true;
 		}
 		if (nappula->getKoodi() == MS && alkuruutu->getRivi() - loppuruutu->getRivi() == 2) {
@@ -169,6 +169,48 @@ void Asema::paivitaAsema(Siirto *siirto)
 					_lauta[x2][y2 + 1] = NULL; // Musta söi valkoisen
 				}
 			}
+		}
+
+		if ((nappula->getKoodi() == VS || nappula->getKoodi() == MS) 
+			&& (loppuruutu->getRivi() == 0 || loppuruutu->getRivi() == 7))
+		{
+			int korotus;
+			do {
+				wcout << "Miksi korotetaan? (1 = Daami, 2 = Torni, 3 = Lähetti, 4 = Ratsu)" << endl;
+				wcin >> korotus;
+
+				switch (korotus)
+				{
+				case 1:
+					if (y2 == 7)
+						_lauta[x2][y2] = vd;
+					else if (y2 == 0)
+						_lauta[x2][y2] = md;
+					break;
+
+				case 2:
+					if (y2 == 7)
+						_lauta[x2][y2] = vt;
+					else if (y2 == 0)
+						_lauta[x2][y2] = mt;
+					break;
+				
+				case 3:
+					if (y2 == 7)
+						_lauta[x2][y2] = vl;
+					else if (y2 == 0)
+						_lauta[x2][y2] = ml;
+					break;
+
+				case 4:
+					if (y2 == 7)
+						_lauta[x2][y2] = vr;
+					else if (y2 == 0)
+						_lauta[x2][y2] = mr;
+					break;
+				}
+				
+			} while (korotus > 1 && korotus < 4);
 		}
 
 		//// Katsotaan jos nappula on sotilas ja rivi on päätyrivi niin ei vaihdeta nappulaa 
@@ -391,19 +433,46 @@ void Asema::huolehdiKuninkaanShakeista(std::list<Siirto>& lista, int vari)
 
 void Asema::annaLinnoitusSiirrot(std::list<Siirto>& lista, int vari)
 {
+	// Linnoituksien huomioiminen
+	// 1. Kuningas ei saa olla liikkunut
+	// 2. Torni ei saa olla liikkunut
+	// 3. Kuningas ei saa olla shakattuna
+	// 4. Ruutujen pitää olla tyhjät
+	// 5. Ruudut eivät saa olla uhattuja
+
+	// VALKOINEN
 	if (vari == 0)
 	{
 		// Lyhyt
 		if (!this->getOnkoValkeaKuningasLiikkunut() && !this->getOnkoValkeaKTliikkunut()
-			&& this->onkoRuutuUhattu(&Ruutu(0, 4), !vari) && this->onkoRuutuUhattu(&Ruutu(0, 5), !vari) && this->onkoRuutuUhattu(&Ruutu(0, 6), !vari)
-			&& this->_lauta[0][5] == NULL && this->_lauta[6][0] == NULL)
+			&& this->onkoRuutuUhattu(&Ruutu(4, 0), !vari) && this->onkoRuutuUhattu(&Ruutu(5, 0), !vari) && this->onkoRuutuUhattu(&Ruutu(6, 0), !vari)
+			&& this->_lauta[5][0] == NULL && this->_lauta[6][0] == NULL)
 		{
 			lista.push_back(Siirto(true, false));
 		}
 		// Pitkä
 		if (!this->getOnkoValkeaKuningasLiikkunut() && !this->getOnkoValkeaDTliikkunut()
-			&& this->onkoRuutuUhattu(&Ruutu(0, 4), !vari) && this->onkoRuutuUhattu(&Ruutu(0, 3), !vari) && this->onkoRuutuUhattu(&Ruutu(0, 3), !vari)
-			&& this->_lauta[0][3] == NULL && this->_lauta[2][0] == NULL)
+			&& this->onkoRuutuUhattu(&Ruutu(4, 0), !vari) && this->onkoRuutuUhattu(&Ruutu(3, 0), !vari) && this->onkoRuutuUhattu(&Ruutu(2, 0), !vari)
+			&& this->_lauta[3][0] == NULL && this->_lauta[2][0] == NULL)
+		{
+			lista.push_back(Siirto(false, true));
+		}
+	}
+
+	// MUSTA
+	if (vari == 1)
+	{
+		// Lyhyt
+		if (!this->getOnkoMustaKuningasLiikkunut() && !this->getOnkoMustaKTliikkunut()
+			&& this->onkoRuutuUhattu(&Ruutu(4, 7), !vari) && this->onkoRuutuUhattu(&Ruutu(5, 7), !vari) && this->onkoRuutuUhattu(&Ruutu(6, 7), !vari)
+			&& this->_lauta[5][7] == NULL && this->_lauta[6][7] == NULL)
+		{
+			lista.push_back(Siirto(true, false));
+		}
+		// Pitkä
+		if (!this->getOnkoValkeaKuningasLiikkunut() && !this->getOnkoValkeaDTliikkunut()
+			&& this->onkoRuutuUhattu(&Ruutu(4, 7), !vari) && this->onkoRuutuUhattu(&Ruutu(3, 7), !vari) && this->onkoRuutuUhattu(&Ruutu(2, 7), !vari)
+			&& this->_lauta[3][7] == NULL && this->_lauta[2][7] == NULL)
 		{
 			lista.push_back(Siirto(false, true));
 		}

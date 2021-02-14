@@ -352,9 +352,9 @@ void Sotilas::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, 
 	if (vari == 1) {
 		// Siirto suoraan eteenpäin
 		if (rivi - 1 >= 0) {
-			if (rivi == 6 && asema->_lauta[sarake][rivi - 2] == NULL) {
-				lista.push_back(Siirto(*ruutu, Ruutu(sarake, rivi - 2)));
-			}
+			if (rivi - 2 >= 0)
+				if (rivi == 6 && asema->_lauta[sarake][rivi - 2] == NULL)
+					lista.push_back(Siirto(*ruutu, Ruutu(sarake, rivi - 2)));
 			if (asema->_lauta[rivi - 1][sarake] == NULL) {
 				lista.push_back(Siirto(*ruutu, Ruutu(sarake, rivi - 1)));
 			}
@@ -382,5 +382,43 @@ void Sotilas::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, 
 
 
 void Sotilas::lisaaSotilaanKorotukset(Siirto* siirto, std::list<Siirto>& lista, Asema* asema) {
-	
+	// Valkoisen korotus
+	if (siirto->getLoppuruutu().getRivi() == 7)
+	{
+		Siirto daamiksi = *siirto;
+		siirto->_miksikorotetaan = asema->vd;
+		lista.push_back(daamiksi);
+
+		Siirto torniksi = *siirto;
+		torniksi._miksikorotetaan = asema->vt;
+		lista.push_back(torniksi);
+
+		Siirto lahetiksi = *siirto;
+		lahetiksi._miksikorotetaan = asema->vl;
+		lista.push_back(lahetiksi);
+
+		Siirto ratsuksi = *siirto;
+		ratsuksi._miksikorotetaan = asema->vr;
+		lista.push_back(ratsuksi);
+	}
+
+	// Mustan korotus
+	else if (siirto->getLoppuruutu().getRivi() == 0)
+	{
+		Siirto daamiksi = *siirto;
+		siirto->_miksikorotetaan = asema->md;
+		lista.push_back(daamiksi);
+
+		Siirto torniksi = *siirto;
+		torniksi._miksikorotetaan = asema->mt;
+		lista.push_back(torniksi);
+
+		Siirto lahetiksi = *siirto;
+		lahetiksi._miksikorotetaan = asema->ml;
+		lista.push_back(lahetiksi);
+
+		Siirto ratsuksi = *siirto;
+		ratsuksi._miksikorotetaan = asema->mr;
+		lista.push_back(ratsuksi);
+	}
 }
