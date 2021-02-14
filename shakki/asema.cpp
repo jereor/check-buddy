@@ -143,10 +143,10 @@ void Asema::paivitaAsema(Siirto *siirto)
 			_onkoMustaKTliikkunut = true;
 		}
 		if (nappula->getKoodi() == MS && alkuruutu->getRivi() - loppuruutu->getRivi() == 2) {
-			kaksoisaskelSarakkeella = 1;
+			kaksoisaskelSarakkeella = loppuruutu->getSarake();
 		}
 		if (nappula->getKoodi() == VS && loppuruutu->getRivi() - alkuruutu->getRivi() == 2) {
-			kaksoisaskelSarakkeella = 1;
+			kaksoisaskelSarakkeella = loppuruutu->getSarake();
 		}
 
 		// Ohestalyönti on tyhjään ruutuun. Vieressä oleva (sotilas) poistetaan.
@@ -422,8 +422,27 @@ MinMaxPaluu Asema::mini(int syvyys)
 
 bool Asema::onkoRuutuUhattu(Ruutu* ruutu, int vastustajanVari)
 {
+	std::list<Siirto> vastustajaSiirrotLista;
+	for (int i = 7; i >= 0; i--) {
+		for (int j = 0; j < 8; j++) {
+			if (this->_lauta[i][j] == NULL)
+				continue;
+			if (this->_lauta[i][j]->getVari() == vastustajanVari)
+				this->_lauta[i][j]->annaSiirrot(vastustajaSiirrotLista, &Ruutu(i, j), this, vastustajanVari);
+		}
+	}
 
-	return false;
+	// Käydään vastustajaSiirtoLista läpi ja jos sieltä löytyy tarkasteltava ruutu niin tiedetään sen olevan uhattu
+	bool ruutuOK = true;
+	for (auto s : vastustajaSiirrotLista)
+	{
+		if (ruutu->getSarake() == s.getLoppuruutu().getSarake() && ruutu->getRivi() == s.getLoppuruutu().getRivi()) {
+			ruutuOK = false;
+			break;
+		}
+	}
+
+	return ruutuOK;
 }
 
 void Asema::huolehdiKuninkaanShakeista(std::list<Siirto>& lista, int vari) 

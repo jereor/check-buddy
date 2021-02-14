@@ -321,30 +321,22 @@ void Sotilas::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, 
 	if (vari == 0) {
 		// Siirto suoraan eteenpäin
 		if (rivi + 1 < 8) {
-			if (rivi == 1 && asema->_lauta[sarake][rivi + 2] == NULL) {
-				lista.push_back(Siirto(*ruutu, Ruutu(sarake, rivi + 2)));
-			}
+			if (rivi + 2 < 8)
+				if (rivi == 1 && asema->_lauta[sarake][rivi + 2] == NULL) {
+					lista.push_back(Siirto(*ruutu, Ruutu(sarake, rivi + 2)));
+				}
 			if (asema->_lauta[sarake][rivi + 1] == NULL) {
 				lista.push_back(Siirto(*ruutu, Ruutu(sarake, rivi + 1)));
 			}
 		}
 
-		// Ohestalyönti oikealle
-		if (rivi + 1 < 8) {
-			if (sarake + 1 < 8) {
-				if (asema->_lauta[sarake + 1][rivi + 1] != NULL) { 
-					lista.push_back(Siirto(*ruutu, Ruutu(sarake + 1, rivi + 1)));
-				}
-			}
-		}
-
-		// Ohestalyönti vasemmalle
-		if (rivi - 1 >= 0) {
-			if (sarake + 1 < 8) {
-				if (asema->_lauta[sarake - 1][rivi + 1] != NULL) {
-					lista.push_back(Siirto(*ruutu, Ruutu(sarake - 1, rivi + 1)));
-				}
-			}
+		// Onko ohestalyönti mahdollista?
+		// Jos on, millä sarakkeella kaksoisaskel on tapahtunut?
+		if (asema->kaksoisaskelSarakkeella != -1)
+		{
+			if (rivi == 4)
+				if (asema->_lauta[asema->kaksoisaskelSarakkeella][4] && asema->_lauta[asema->kaksoisaskelSarakkeella][5] == NULL)
+					lista.push_back(Siirto(*ruutu, Ruutu(asema->kaksoisaskelSarakkeella, 5)));
 		}
 	}
 
@@ -360,25 +352,17 @@ void Sotilas::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, 
 			}
 		}
 
-		// Ohestalyönti oikealle
-		if (rivi - 1 >= 0) {
-			if (sarake + 1 < 8) {
-				if (asema->_lauta[rivi - 1][sarake + 1] != NULL) {
-					lista.push_back(Siirto(*ruutu, Ruutu(sarake + 1, rivi - 1)));
-				}
-			}
-		}
-
-		// Ohestalyönti vasemmalle
-		if (rivi - 1 >= 0) {
-			if (sarake - 1 >= 0) {
-				if (asema->_lauta[rivi - 1][sarake - 1] != NULL) {
-					lista.push_back(Siirto(*ruutu, Ruutu(sarake - 1, rivi - 1)));
-				}
-			}
+		// Onko ohestalyönti mahdollista?
+		// Jos on, millä sarakkeella kaksoisaskel on tapahtunut?
+		if (asema->kaksoisaskelSarakkeella != -1)
+		{
+			if (rivi == 3)
+				if (asema->_lauta[asema->kaksoisaskelSarakkeella][3] && asema->_lauta[asema->kaksoisaskelSarakkeella][2] == NULL)
+					lista.push_back(Siirto(*ruutu, Ruutu(asema->kaksoisaskelSarakkeella, 2)));
 		}
 	}
 }
+
 
 
 void Sotilas::lisaaSotilaanKorotukset(Siirto* siirto, std::list<Siirto>& lista, Asema* asema) {
