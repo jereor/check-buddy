@@ -147,7 +147,7 @@ Siirto Kayttoliittyma::annaVastustajanSiirto()
 		alkuasema = input.substr(1, 2);
 		loppuasema = input.substr(4, 5);
 
-		wcout << "Nappulatyyppi: " << nappulatyyppi << endl << "Nappula :" << alkuasema << " " << loppuasema << endl;
+		// wcout << "Nappulatyyppi: " << nappulatyyppi << endl << "Nappula :" << alkuasema << " " << loppuasema << endl;
 
 		int x1, y1, x2, y2;
 

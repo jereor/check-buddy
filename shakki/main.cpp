@@ -25,9 +25,20 @@ int main()
 	int koneenVari = peli.getKoneenVari();
 	Siirto siirto;
 
-	while (true)
+	while (lopetus != 0)
 	{
+		lista.clear();
 		Kayttoliittyma::getInstance()->piirraLauta();
+		wcout << "\n";
+
+		asema.annaLaillisetSiirrot(lista);
+
+		if (lista.size() == 0) {
+			lopetus = 0;
+			wcout << "\nPeli loppui";
+			continue;
+		}
+
 		siirto = Kayttoliittyma::getInstance()->annaVastustajanSiirto();
 		asema.paivitaAsema(&siirto);
 	}

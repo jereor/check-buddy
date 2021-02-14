@@ -235,49 +235,49 @@ void Asema::paivitaAsema(Siirto *siirto)
 
 int Asema::getSiirtovuoro() 
 {
-	return 0;
+	return this->_siirtovuoro;
 }
 
 
 void Asema::setSiirtovuoro(int vuoro) 
 {
-	
+	this->_siirtovuoro = vuoro;
 }
 
 
 bool Asema::getOnkoValkeaKuningasLiikkunut() 
 {
-	return false;
+	return this->_onkoValkeaKuningasLiikkunut;
 }
 
 
 bool Asema::getOnkoMustaKuningasLiikkunut() 
 {
-	return false;
+	return this->_onkoMustaKuningasLiikkunut;
 }
 
 
 bool Asema::getOnkoValkeaDTliikkunut() 
 {
-	return false;
+	return this->_onkoValkeaDTliikkunut;
 }
 
 
 bool Asema::getOnkoValkeaKTliikkunut() 
 {
-	return false;
+	return this->_onkoValkeaKTliikkunut;
 }
 
 
 bool Asema::getOnkoMustaDTliikkunut() 
 {
-	return false;
+	return this->_onkoMustaDTliikkunut;
 }
 
 
 bool Asema::getOnkoMustaKTliikkunut() 
 {
-	return false;
+	return this->_onkoMustaKTliikkunut;
 }
 
 
@@ -297,25 +297,35 @@ vai olla estämässä vastustajan korotusta siksi ei oteta kantaa
 */
 double Asema::evaluoi() 
 {
-	return 0;
-
 	//kertoimet asetettu sen takia että niiden avulla asioiden painoarvoa voidaan säätää helposti yhdestä paikasta
 	
 	//1. Nappuloiden arvo
+	laskeNappuloidenArvo(this->_siirtovuoro);
 	
 	//2. Kuningas turvassa
+
 	
 	//3. Arvosta keskustaa
+
 	
 	// 4. Arvosta linjoja
 	
+	return 0;
 }
 
 
 double Asema::laskeNappuloidenArvo(int vari) 
 {
+	double yhteisarvo;
+
+	for (int x = 0; x < 8; ++x) {
+		for (int y = 0; y < 8; ++y) {
+			if (_lauta[x][y]->getKoodi() == vd)
+
+		}
+	}
+
 	return 0;
-	
 }
 
 
@@ -434,9 +444,9 @@ bool Asema::onkoRuutuUhattu(Ruutu* ruutu, int vastustajanVari)
 
 	// Käydään vastustajaSiirtoLista läpi ja jos sieltä löytyy tarkasteltava ruutu niin tiedetään sen olevan uhattu
 	bool ruutuOK = true;
-	for (auto s : vastustajaSiirrotLista)
+	for (auto siirto : vastustajaSiirrotLista)
 	{
-		if (ruutu->getSarake() == s.getLoppuruutu().getSarake() && ruutu->getRivi() == s.getLoppuruutu().getRivi()) {
+		if (ruutu->getSarake() == siirto.getLoppuruutu().getSarake() && ruutu->getRivi() == siirto.getLoppuruutu().getRivi()) {
 			ruutuOK = false;
 			break;
 		}
@@ -447,7 +457,9 @@ bool Asema::onkoRuutuUhattu(Ruutu* ruutu, int vastustajanVari)
 
 void Asema::huolehdiKuninkaanShakeista(std::list<Siirto>& lista, int vari) 
 { 
-	
+	// paivitaAsema(listan alkio); TESTATAAN SIIRTO
+	// onkoRuutuUhattu(kuninkaan ruutu); KATSOTAAN ONKO KUNINGAS UHATTU
+	// paivitaAsema(listan alkion vastakohta); PERUUTETAAN SIIRTO
 }
 
 void Asema::annaLinnoitusSiirrot(std::list<Siirto>& lista, int vari)
