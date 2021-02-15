@@ -300,7 +300,7 @@ double Asema::evaluoi()
 	//kertoimet asetettu sen takia että niiden avulla asioiden painoarvoa voidaan säätää helposti yhdestä paikasta
 	
 	//1. Nappuloiden arvo
-	laskeNappuloidenArvo(this->_siirtovuoro);
+	double nappuloidenArvo = laskeNappuloidenArvo(this->_siirtovuoro);
 	
 	//2. Kuningas turvassa
 
@@ -310,7 +310,7 @@ double Asema::evaluoi()
 	
 	// 4. Arvosta linjoja
 	
-	return 0;
+	return nappuloidenArvo;
 }
 
 
@@ -338,7 +338,6 @@ double Asema::laskeNappuloidenArvo(int vari)
 				vArvo += 0;
 			case 5: // Valkoinen sotilas
 				vArvo += 1;
-
 			case 6: // Musta torni
 				mArvo += 5;
 			case 7: // Musta ratsu
@@ -368,7 +367,7 @@ bool Asema::onkoAvausTaiKeskipeli(int vari)
 {
 	return 0;
 	// Jos upseereita 3 tai vähemmän on loppupeli
-	// mutta jos daami laudalla on loppueli vasta kun kuin vain daami jäljellä
+	// mutta jos daami laudalla on loppupeli vasta kun kuin vain daami jäljellä
 	
 	//Jos vari on 0 eli valkoiset
 	//niin on keskipeli jos mustalla upseereita yli 2 tai jos daami+1
@@ -434,6 +433,7 @@ double Asema::linjat(int vari)
 //	}
 //	return min;
 //}
+
 MinMaxPaluu Asema::minimax(int syvyys)
 {
 	MinMaxPaluu paluuarvo;
@@ -451,18 +451,41 @@ MinMaxPaluu Asema::minimax(int syvyys)
 }
 
 
-MinMaxPaluu Asema::maxi(int syvyys) 
-{
-	MinMaxPaluu paluu;
-	return paluu;
-}
+//MinMaxPaluu Asema::maxi(int syvyys) 
+//{
+//	MinMaxPaluu paluu;
+//	double pisteet;
+//
+//	if (syvyys == 0)
+//		return minimax(syvyys);
+//	int max = -oo;
+//
+//	for (all moves) {
+//		pisteet = mini(syvyys - 1, seuraaja);
+//		if (pisteet > max)
+//			max = score;
+//	}
+//
+//	return paluu;
+//}
 
 
-MinMaxPaluu Asema::mini(int syvyys) 
-{
-	MinMaxPaluu paluu;
-	return paluu;
-}
+//MinMaxPaluu Asema::mini(int syvyys) 
+//{
+//	MinMaxPaluu paluu;
+//	double pisteet;
+//
+//	if (syvyys == 0)
+//		return minimax(syvyys);
+//	int min = +oo;
+//
+//	for (all moves) {
+//		pisteet = maxi(syvyys - 1);
+//		if (pisteet < min)
+//			min = score;
+//	}
+//	return paluu;
+//}
 
 
 bool Asema::onkoRuutuUhattu(Ruutu* ruutu, int vastustajanVari)
