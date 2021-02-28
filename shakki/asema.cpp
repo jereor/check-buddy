@@ -21,7 +21,7 @@ Nappula* Asema::ms = new Sotilas(L"\u265F", 1, MS);
 
 Asema::Asema()
 {
-	// Ensin alustetaan kaikki laudan ruudut nappulla "NULL", koska muuten ruuduissa satunnaista tauhkaa
+	// Ensin alustetaan kaikki laudan ruudut nappulalla "NULL", koska muuten ruuduissa satunnaista tauhkaa
 	for (int x = 0; x < 8; ++x) {
 		for (int y = 0; y < 8; ++y) {
 			_lauta[x][y] = NULL;
@@ -63,17 +63,19 @@ Asema::Asema()
 	_lauta[6][5] = ms; // Musta Sotilas
 	_lauta[6][6] = ms; // Musta Sotilas
 	_lauta[6][7] = ms; // Musta Sotilas
+	
+	// Asetetaan siirtovuoro aina aluksi valkoiselle
+	setSiirtovuoro(0);
 }
 
 
 void Asema::paivitaAsema(Siirto *siirto)
 {
-	// Kaksoisaskel-lippu on oletusarvoisesti pois päältä.
-	// Asetetaan myöhemmin, jos tarvii.
+	// Kaksoisaskel-lippu on oletusarvoisesti pois päältä
 	kaksoisaskelSarakkeella = -1;
 
 
-	//Tarkastetaan on siirto lyhyt linna
+	//Tarkastetaan onko siirto lyhyt linna
 	if (siirto->onkoLyhytLinna())
 	{
 		if (_siirtovuoro == 0) {
@@ -213,17 +215,6 @@ void Asema::paivitaAsema(Siirto *siirto)
 			} while (korotus > 1 && korotus < 4);
 		}
 
-		//// Katsotaan jos nappula on sotilas ja rivi on päätyrivi niin ei vaihdeta nappulaa 
-		////eli alkuruutuun laitetaan null ja loppuruudussa on jo kliittymän laittama nappula
-
-
-		//
-		////muissa tapauksissa alkuruutuun null ja loppuruutuun sama alkuruudusta l�htenyt nappula
-
-		// katsotaan jos liikkunut nappula on kuningas niin muutetaan onkoKuningasLiikkunut arvo (molemmille väreille)
-
-		// katsotaan jos liikkunut nappula on torni niin muutetaan onkoTorniLiikkunut arvo (molemmille väreille ja molemmille torneille)
-
 		// päivitetään _siirtovuoro
 		if (getSiirtovuoro() == 0) setSiirtovuoro(1);
 		else setSiirtovuoro(0);
@@ -289,7 +280,7 @@ Ratsu = 3
 Sotilas = 1
 
 2. Kuninkaan hyvyys
-Jos avaus tai keskipeli, niin hyvä että kunigas g1 tai b1/c1
+Jos avaus tai keskipeli, niin hyvä että kuningas g1 tai b1/c1
 Loppupelissä vaikea sanoa halutaanko olla auttamassa omaa sotilasta korottumaan
 vai olla estämässä vastustajan korotusta siksi ei oteta kantaa
 3. Arvosta keskustaa sotilailla ja ratsuilla
@@ -313,12 +304,12 @@ double Asema::evaluoi()
 
 	
 	//3. Arvosta keskustaa
-	valkeaArvo = nappuloitaKeskella(0) * keskustaKerroin;
-	mustaArvo = nappuloitaKeskella(1) * keskustaKerroin;
+	//valkeaArvo = nappuloitaKeskella(0) * keskustaKerroin;
+	//mustaArvo = nappuloitaKeskella(1) * keskustaKerroin;
 	
 	// 4. Arvosta linjoja
-	valkeaArvo = linjaKerroin * linjat(0);
-	mustaArvo = linjaKerroin * linjat(1);
+	//valkeaArvo = linjaKerroin * linjat(0);
+	//mustaArvo = linjaKerroin * linjat(1);
 	
 	//return nappuloidenArvo;
 	return valkeaArvo - mustaArvo;
@@ -514,22 +505,22 @@ MinMaxPaluu Asema::maxi(int syvyys)
 }
 
 
-//MinMaxPaluu Asema::mini(int syvyys) 
-//{
-//	MinMaxPaluu paluu;
-//	double pisteet;
-//
-//	if (syvyys == 0)
-//		return minimax(syvyys);
-//	int min = +oo;
-//
-//	for (all moves) {
-//		pisteet = maxi(syvyys - 1);
-//		if (pisteet < min)
-//			min = score;
-//	}
-//	return paluu;
-//}
+MinMaxPaluu Asema::mini(int syvyys) 
+{
+	MinMaxPaluu paluu;
+	/*double pisteet;
+
+	if (syvyys == 0)
+		return minimax(syvyys);
+	int min = +oo;
+
+	for (all moves) {
+		pisteet = maxi(syvyys - 1);
+		if (pisteet < min)
+			min = score;
+	}*/
+	return paluu;
+}
 
 
 bool Asema::onkoRuutuUhattu(Ruutu* ruutu, int vastustajanVari)
@@ -612,7 +603,7 @@ void Asema::annaLinnoitusSiirrot(std::list<Siirto>& lista, int vari)
 	}
 }
 
-void Asema::annaLaillisetSiirrot(std::list<Siirto>& lista) 
+void Asema::annaLaillisetSiirrot(std::list<Siirto>& lista)
 {
 	int vari = this->getSiirtovuoro();
 
@@ -628,6 +619,7 @@ void Asema::annaLaillisetSiirrot(std::list<Siirto>& lista)
 			this->_lauta[i][j]->annaSiirrot(lista, &Ruutu(i, j), this, vari); // Myöhäinen sidonta
 		}
 	}
+
 	this->annaLinnoitusSiirrot(lista, vari);
 	this->huolehdiKuninkaanShakeista(lista, vari);
 }
