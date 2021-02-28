@@ -500,6 +500,20 @@ MinMaxPaluu Asema::maxi(int syvyys)
 		paluu._evaluointiArvo = this->evaluoi();
 		return paluu;
 	}
+
+	double maxi = -1000000;
+	for (auto s : lista) {
+		uusiAsema = *this;
+		uusiAsema.paivitaAsema(&s);
+		arvo = uusiAsema.mini(syvyys - 1)._evaluointiArvo;
+		if (arvo > maxi) {
+			maxi = arvo;
+			_parasSiirto = s;
+		}
+	}
+	paluu._evaluointiArvo = maxi;
+	paluu._parasSiirto = _parasSiirto;
+
 	/*if (syvyys == 0)
 		return minimax(syvyys);
 	int max = -oo;
