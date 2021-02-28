@@ -12,51 +12,35 @@ using namespace std;
 
 int main()
 {
-	wcout << "HeippariShakki\n";
-	wcout << "Tervetuloa pelaamaan!\n";
+	std::wcout << "HeippariShakki\n";
+	std::wcout << "Tervetuloa pelaamaan!\n";
 	int lopetus = 100;
 	Asema asema; 
 	Kayttoliittyma::getInstance()->aseta_asema(&asema);
 
-	Peli peli(Kayttoliittyma::getInstance()->
-		kysyVastustajanVari());
+	Peli peli(Kayttoliittyma::getInstance()->kysyVastustajanVari());
 	std::list<Siirto> lista;
 	system("cls");
 	int koneenVari = peli.getKoneenVari();
 	Siirto siirto;
 
-	while (lopetus != 0)
-	{
-		lista.clear();
-		Kayttoliittyma::getInstance()->piirraLauta();
-		wcout << "\n";
-
-		asema.annaLaillisetSiirrot(lista);
-
-		if (lista.size() == 0) {
-			lopetus = 0;
-			wcout << "\nPeli loppui";
-			continue;
-		}
-
-		siirto = Kayttoliittyma::getInstance()->annaVastustajanSiirto();
-		asema.paivitaAsema(&siirto);
-	}
-
 	while (lopetus != 0) {
 		lista.clear();
 		Kayttoliittyma::getInstance()->piirraLauta();
-		wcout << "\n";
-		// Tarkasta onko peli loppu?
-
+		std::wcout << "\n";
+		
+		std::wcout << "Generoidaan siirtoja..." << endl;
+		// Uusi kierros, uudet siirrot
 		asema.annaLaillisetSiirrot(lista);
 		
+		// Jos siirtolista on tyhjä, peli on päättynyt.
 		if (lista.size() == 0) {
 			lopetus = 0;
 			std::wcout << "\nPeli loppui";
 			continue;
 		}
 
+		// Muuten, jatketaan laskemaan paras siirto
 		Siirto siirto;
 		if (asema.getSiirtovuoro() == koneenVari) {
 			MinMaxPaluu paluu;

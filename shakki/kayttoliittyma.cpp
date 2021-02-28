@@ -194,5 +194,8 @@ Siirto Kayttoliittyma::annaVastustajanSiirto()
 
 int Kayttoliittyma::kysyVastustajanVari()
 {
-	return 0;
+	int vari;
+	cout << "Millä värillä pelataan? (0 = valkoinen, 1 = musta) ";
+	cin >> vari;
+	return vari;
 }
