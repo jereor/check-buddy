@@ -298,19 +298,30 @@ vai olla estämässä vastustajan korotusta siksi ei oteta kantaa
 double Asema::evaluoi() 
 {
 	//kertoimet asetettu sen takia että niiden avulla asioiden painoarvoa voidaan säätää helposti yhdestä paikasta
-	
+	double valkeaArvo = 0;
+	double mustaArvo = 0;
+	double kuningasKerroin = 1;
+	double keskustaKerroin = 1;
+	double linjaKerroin = 0.05;
+
 	//1. Nappuloiden arvo
 	double nappuloidenArvo = laskeNappuloidenArvo(this->_siirtovuoro);
+	valkeaArvo += laskeNappuloidenArvo(0);
+	mustaArvo += laskeNappuloidenArvo(1);
 	
 	//2. Kuningas turvassa
 
 	
 	//3. Arvosta keskustaa
-
+	valkeaArvo = nappuloitaKeskella(0) * keskustaKerroin;
+	mustaArvo = nappuloitaKeskella(1) * keskustaKerroin;
 	
 	// 4. Arvosta linjoja
+	valkeaArvo = linjaKerroin * linjat(0);
+	mustaArvo = linjaKerroin * linjat(1);
 	
-	return nappuloidenArvo;
+	//return nappuloidenArvo;
+	return valkeaArvo - mustaArvo;
 }
 
 
@@ -451,23 +462,56 @@ MinMaxPaluu Asema::minimax(int syvyys)
 }
 
 
-//MinMaxPaluu Asema::maxi(int syvyys) 
-//{
-//	MinMaxPaluu paluu;
-//	double pisteet;
-//
-//	if (syvyys == 0)
-//		return minimax(syvyys);
-//	int max = -oo;
-//
-//	for (all moves) {
-//		pisteet = mini(syvyys - 1, seuraaja);
-//		if (pisteet > max)
-//			max = score;
-//	}
-//
-//	return paluu;
-//}
+MinMaxPaluu Asema::maxi(int syvyys) 
+{
+	std::list<Siirto> lista;
+	Ruutu kuninkaanRuutu;
+	this->annaLaillisetSiirrot(lista);
+	double arvo;
+	Asema uusiAsema;
+	Siirto _parasSiirto;
+	MinMaxPaluu paluu;
+	double pisteet;
+
+
+	if (lista.size() == 0) {
+		for (int x = 0; x < 8; x++) {
+			for (int y = 0; y < 8; y++) {
+				if (this->_lauta[x][y]->getKoodi() == VK) {
+					kuninkaanRuutu.setSarake(x);
+					kuninkaanRuutu.setRivi(y);
+				}
+			}
+		}
+	}
+	//matti
+	if (this->onkoRuutuUhattu(&kuninkaanRuutu, 1)) {
+		paluu._evaluointiArvo = -1000000;
+		return paluu;
+	}
+
+	//patti
+	if (!this->onkoRuutuUhattu(&kuninkaanRuutu, 1)) {
+		paluu._evaluointiArvo = 0;
+		return paluu;
+	}
+
+	if (syvyys == 0) {
+		paluu._evaluointiArvo = this->evaluoi();
+		return paluu;
+	}
+	/*if (syvyys == 0)
+		return minimax(syvyys);
+	int max = -oo;
+
+	for (all moves) {
+		pisteet = mini(syvyys - 1, seuraaja);
+		if (pisteet > max)
+			max = score;
+	}*/
+
+	return paluu;
+}
 
 
 //MinMaxPaluu Asema::mini(int syvyys) 
