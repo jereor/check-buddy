@@ -28,21 +28,21 @@ int main()
 		Kayttoliittyma::getInstance()->piirraLauta();
 		std::wcout << "\n";
 		
-		//std::wcout << "Generoidaan siirtoja..." << endl;
-		//// Uusi kierros, uudet siirrot
-		//asema.annaLaillisetSiirrot(lista);
-		//std::wcout << "Siirrot generoitu." << endl;
-		//
-		//// Jos siirtolista on tyhjä, peli on päättynyt.
-		//if (lista.size() == 0) {
-		//	lopetus = 0;
-		//	std::wcout << "\nPeli loppui";
-		//	continue;
-		//}
+		std::wcout << "Generoidaan siirtoja..." << endl;
+		// Uusi kierros, uudet siirrot
+		asema.annaLaillisetSiirrot(lista);
+		std::wcout << "Siirrot generoitu." << endl;
+		
+		// Jos siirtolista on tyhjä, peli on päättynyt.
+		if (lista.size() == 0) {
+			lopetus = 0;
+			std::wcout << "\nPeli loppui";
+			continue;
+		}
 
 		// Muuten, jatketaan laskemaan paras siirto
 		Siirto siirto = Kayttoliittyma::getInstance()->annaVastustajanSiirto();
-		/*if (asema.getSiirtovuoro() == koneenVari) {
+		if (asema.getSiirtovuoro() == koneenVari) {
 			wcout << "Lasketaan paras siirto" << endl;
 			MinMaxPaluu paluu;
 			if (koneenVari == 0) {
@@ -55,7 +55,7 @@ int main()
 		}
 		else {
 			siirto = Kayttoliittyma::getInstance()->annaVastustajanSiirto();
-		}*/
+		}
 		asema.paivitaAsema(&siirto);
 	}
 	

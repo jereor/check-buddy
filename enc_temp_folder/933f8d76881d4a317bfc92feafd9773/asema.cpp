@@ -215,8 +215,8 @@ void Asema::paivitaAsema(Siirto *siirto)
 		wcout << x1 << " " << y1 << " -> " << x2 << " " << y2 << endl;
 
 		// päivitetään _siirtovuoro
-		if (getSiirtovuoro() == 0) setSiirtovuoro(1);
-		else setSiirtovuoro(0);
+		/*if (getSiirtovuoro() == 0) setSiirtovuoro(1);
+		else setSiirtovuoro(0);*/
 	}
 
 }
@@ -463,9 +463,10 @@ MinMaxPaluu Asema::maxi(int syvyys)
 	MinMaxPaluu paluu;
 	double pisteet;
 
+
 	if (lista.size() == 0) {
-		for (int y = 0; y < 8; y++) {
-			for (int x = 0; x < 8; x++) {
+		for (int x = 0; x < 8; x++) {
+			for (int y = 0; y < 8; y++) {
 				if (this->_lauta[y][x]->getKoodi() == VK)
 				{
 					kuninkaanRuutu.setSarake(x);

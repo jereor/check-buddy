@@ -20,38 +20,44 @@ void Nappula::lisaaListalle(int alkuY, int alkuX, int loppuY, int loppuX, list<S
 	int loppuruutuX = loppuX;
 	int loppuruutuY = loppuY;
 
-	Ruutu lahtoruutu(alkuruutuY, alkuruutuX);
+	Ruutu alkuruutu(alkuruutuY, alkuruutuX);
 	Ruutu loppuruutu(loppuruutuY, loppuruutuX);
 
-	Siirto siirto(lahtoruutu, loppuruutu);
+	Siirto siirto(alkuruutu, loppuruutu);
 	lista.push_back(siirto);
+
+	delete[] &alkuruutuX;
+	delete[] &alkuruutuY;
+	delete[] &loppuruutuX;
+	delete[] &loppuruutuY;
+	delete[] &alkuruutu;
+	delete[] &loppuruutu;
 }
 
 
 void Torni::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, int vari)
 {
-	wcout << "Tornin siirrot:" << endl;
-	int lahtoruutuY = ruutu->getRivi();
-	int lahtoruutuX = ruutu->getSarake();
+	int alkuruutuY = ruutu->getRivi();
+	int alkuruutuX = ruutu->getSarake();
 
-	int lahtovari = asema->_lauta[lahtoruutuY][lahtoruutuX]->getVari();
+	int lahtovari = asema->_lauta[alkuruutuY][alkuruutuX]->getVari();
 	int loppuvari;
 
 	// Tornin liike ylös
 	for (int i = 1; i < 8; i++) {
-		if (lahtoruutuY + i < 8) {
+		if (alkuruutuY + i < 8) {
 			// Siirto on OK, jos yläpuolella oleva ruutu on tyhjä
-			if (asema->_lauta[lahtoruutuY + i][lahtoruutuX] == NULL) {
-				wcout << "Ylös: " << (lahtoruutuY + i) << endl;
-				lista.push_back(Siirto(*ruutu, Ruutu(lahtoruutuY + 1, lahtoruutuX)));
+			if (asema->_lauta[alkuruutuY + i][alkuruutuX] == NULL) {
+				wcout << "Ylös: " << (alkuruutuY + i) << endl;
+				lista.push_back(Siirto(*ruutu, Ruutu(alkuruutuY + 1, alkuruutuX)));
 			}
 			else
 			{
 				// Siirto on OK, jos yläpuolella olevassa ruudussa on vastustajan nappula
-				loppuvari = asema->_lauta[lahtoruutuY + 1][lahtoruutuX]->getVari();
+				loppuvari = asema->_lauta[alkuruutuY + 1][alkuruutuX]->getVari();
 				if (lahtovari != loppuvari) {
-					wcout << "Ylös: " << (lahtoruutuY + i) << endl;
-					lista.push_back(Siirto(*ruutu, Ruutu(lahtoruutuY + i, lahtoruutuX)));
+					wcout << "Ylös: " << (alkuruutuY + i) << endl;
+					lista.push_back(Siirto(*ruutu, Ruutu(alkuruutuY + i, alkuruutuX)));
 					break;
 				}
 				else // Ruudussa on oma nappula, joten lopetetaan ylös laskenta
@@ -64,19 +70,19 @@ void Torni::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, in
 
 	// Tornin liike alas
 	for (int i = 1; i < 8; i++) {
-		if (lahtoruutuY - i >= 0) {
+		if (alkuruutuY - i >= 0) {
 			// Siirto on OK, jos yläpuolella oleva ruutu on tyhjä
-			if (asema->_lauta[lahtoruutuY - i][lahtoruutuX] == NULL) {
-				wcout << "Alas: " << (lahtoruutuY - i) << endl;
-				lista.push_back(Siirto(*ruutu, Ruutu(lahtoruutuY - i, lahtoruutuX)));
+			if (asema->_lauta[alkuruutuY - i][alkuruutuX] == NULL) {
+				wcout << "Alas: " << (alkuruutuY - i) << endl;
+				lista.push_back(Siirto(*ruutu, Ruutu(alkuruutuY - i, alkuruutuX)));
 			}
 			else
 			{
 				// Siirto on OK, jos yläpuolella olevassa ruudussa on vastustajan nappula
-				loppuvari = asema->_lauta[lahtoruutuY - i][lahtoruutuX]->getVari();
+				loppuvari = asema->_lauta[alkuruutuY - i][alkuruutuX]->getVari();
 				if (lahtovari != loppuvari) {
-					wcout << "Alas: " << (lahtoruutuY - i) << endl;
-					lista.push_back(Siirto(*ruutu, Ruutu(lahtoruutuY - i, lahtoruutuX)));
+					wcout << "Alas: " << (alkuruutuY - i) << endl;
+					lista.push_back(Siirto(*ruutu, Ruutu(alkuruutuY - i, alkuruutuX)));
 					break;
 				}
 				else // Ruudussa on oma nappula, joten lopetetaan alas laskenta
@@ -89,19 +95,19 @@ void Torni::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, in
 
 	// Tornin liike oikealle
 	for (int i = 1; i < 8; i++) {
-		if (lahtoruutuX + i < 8) {
+		if (alkuruutuX + i < 8) {
 			// Siirto on OK, jos yläpuolella oleva ruutu on tyhjä
-			if (asema->_lauta[lahtoruutuY][lahtoruutuX + i] == NULL) {
-				wcout << "Oikealle: " << (lahtoruutuX + i) << endl;
-				lista.push_back(Siirto(*ruutu, Ruutu(lahtoruutuY, lahtoruutuX + i)));
+			if (asema->_lauta[alkuruutuY][alkuruutuX + i] == NULL) {
+				wcout << "Oikealle: " << (alkuruutuX + i) << endl;
+				lista.push_back(Siirto(*ruutu, Ruutu(alkuruutuY, alkuruutuX + i)));
 			}
 			else
 			{
 				// Siirto on OK, jos yläpuolella olevassa ruudussa on vastustajan nappula
-				loppuvari = asema->_lauta[lahtoruutuY][lahtoruutuX + i]->getVari();
+				loppuvari = asema->_lauta[alkuruutuY][alkuruutuX + i]->getVari();
 				if (lahtovari != loppuvari) {
-					wcout << "Oikealle: " << (lahtoruutuX + i) << endl;
-					lista.push_back(Siirto(*ruutu, Ruutu(lahtoruutuY, lahtoruutuX + i)));
+					wcout << "Oikealle: " << (alkuruutuX + i) << endl;
+					lista.push_back(Siirto(*ruutu, Ruutu(alkuruutuY, alkuruutuX + i)));
 					break;
 				}
 				else // Ruudussa on oma nappula, joten lopetetaan oikealle laskenta
@@ -114,19 +120,19 @@ void Torni::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, in
 
 	// Tornin liike vasemmalle
 	for (int i = 1; i < 8; i++) {
-		if (lahtoruutuX - i > 0) {
+		if (alkuruutuX - i > 0) {
 			// Siirto on OK, jos yläpuolella oleva ruutu on tyhjä
-			if (asema->_lauta[lahtoruutuY][lahtoruutuX - i] == NULL) {
-				wcout << "Vasemmalle: " << (lahtoruutuX - i) << endl;
-				lista.push_back(Siirto(*ruutu, Ruutu(lahtoruutuY, lahtoruutuX - i)));
+			if (asema->_lauta[alkuruutuY][alkuruutuX - i] == NULL) {
+				wcout << "Vasemmalle: " << (alkuruutuX - i) << endl;
+				lista.push_back(Siirto(*ruutu, Ruutu(alkuruutuY, alkuruutuX - i)));
 			}
 			else
 			{
 				// Siirto on OK, jos yläpuolella olevassa ruudussa on vastustajan nappula
-				loppuvari = asema->_lauta[lahtoruutuY][lahtoruutuX - i]->getVari();
+				loppuvari = asema->_lauta[alkuruutuY][alkuruutuX - i]->getVari();
 				if (lahtovari != loppuvari) {
-					wcout << "Vasemmalle: " << (lahtoruutuX - i) << endl;
-					lista.push_back(Siirto(*ruutu, Ruutu(lahtoruutuY, lahtoruutuX - i)));
+					wcout << "Vasemmalle: " << (alkuruutuX - i) << endl;
+					lista.push_back(Siirto(*ruutu, Ruutu(alkuruutuY, alkuruutuX - i)));
 					break;
 				}
 				else // Ruudussa on oma nappula, joten lopetetaan vasemmalle laskenta
@@ -136,12 +142,14 @@ void Torni::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, in
 			}
 		}
 	}
+
+	delete[] & alkuruutuX;
+	delete[] & alkuruutuY;
 }
 
 
 void Ratsu::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, int vari)
 {
-	wcout << "Ratsun siirrot:" << endl;
 	int lahtoruutuY = ruutu->getRivi();
 	int lahtoruutuX = ruutu->getSarake();
 	Ruutu alkuRuutu = Ruutu(lahtoruutuY, lahtoruutuX);
@@ -187,7 +195,6 @@ void Ratsu::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, in
 
 void Lahetti::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, int vari)
 {
-	wcout << "Lähetin siirrot:" << endl;
 	int mahdolliset_suunnat[4][2] = { { 1, 1 }, { -1, -1 }, { 1, -1 }, { -1, 1 } };
 
 	// Tutkitaan lähetin kaikki neljä suuntaa
@@ -232,7 +239,6 @@ void Lahetti::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, 
 
 void Daami::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, int vari)
 {
-	wcout << "Daamin siirrot (Torni + Lähetti):" << endl;
 	Torni::annaSiirrot(lista, ruutu, asema, vari);
 	Lahetti::annaSiirrot(lista, ruutu, asema, vari);
 }
@@ -240,7 +246,6 @@ void Daami::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, in
 
 void Kuningas::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, int vari)
 {
-	wcout << "Kuninkaan siirrot:" << endl;
 	/*perusidea on että kaikki viereiset ruudut ovat sallittuja. kuten tornilla ja l�hetill�,
 	oman nappulan päälle ei voi mennä ja vastustajan nappulan voi syödä.
 
@@ -327,7 +332,6 @@ void Kuningas::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema,
 
 void Sotilas::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, int vari)
 {
-	wcout << "Sotilaan siirrot:" << endl;
 	int rivi = ruutu->getRivi();
 	int sarake = ruutu->getSarake();
 
@@ -360,9 +364,9 @@ void Sotilas::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, 
 		if (rivi - 1 >= 0) {
 			if (rivi - 2 >= 0)
 				if (rivi == 6 && asema->_lauta[rivi - 2][sarake] == NULL)
-					lista.push_back(Siirto(*ruutu, Ruutu(sarake, rivi - 2)));
+					lista.push_back(Siirto(*ruutu, Ruutu(rivi - 2, sarake)));
 			if (asema->_lauta[rivi - 1][sarake] == NULL) {
-				lista.push_back(Siirto(*ruutu, Ruutu(sarake, rivi - 1)));
+				lista.push_back(Siirto(*ruutu, Ruutu(rivi - 1, sarake)));
 			}
 		}
 
@@ -372,7 +376,7 @@ void Sotilas::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, 
 		{
 			if (rivi == 3)
 				if (asema->_lauta[3][asema->kaksoisaskelSarakkeella] && asema->_lauta[2][asema->kaksoisaskelSarakkeella] == NULL)
-					lista.push_back(Siirto(*ruutu, Ruutu(asema->kaksoisaskelSarakkeella, 2)));
+					lista.push_back(Siirto(*ruutu, Ruutu(2, asema->kaksoisaskelSarakkeella)));
 		}
 	}
 }
