@@ -22,7 +22,6 @@ int main()
 	std::list<Siirto> lista;
 	system("cls");
 	int koneenVari = peli.getKoneenVari();
-	Siirto siirto;
 
 	while (lopetus != 0) {
 		lista.clear();
@@ -32,6 +31,7 @@ int main()
 		std::wcout << "Generoidaan siirtoja..." << endl;
 		// Uusi kierros, uudet siirrot
 		asema.annaLaillisetSiirrot(lista);
+		std::wcout << "Siirrot generoitu." << endl;
 		
 		// Jos siirtolista on tyhjä, peli on päättynyt.
 		if (lista.size() == 0) {
@@ -43,6 +43,7 @@ int main()
 		// Muuten, jatketaan laskemaan paras siirto
 		Siirto siirto;
 		if (asema.getSiirtovuoro() == koneenVari) {
+			wcout << "Lasketaan paras siirto" << endl;
 			MinMaxPaluu paluu;
 			if (koneenVari == 0) {
 				paluu = asema.maxi(4);
@@ -53,10 +54,8 @@ int main()
 			siirto = paluu._parasSiirto;
 		}
 		else {
-			siirto = Kayttoliittyma::getInstance()->
-				annaVastustajanSiirto();
+			siirto = Kayttoliittyma::getInstance()->annaVastustajanSiirto();
 		}
-		Kayttoliittyma::getInstance()->annaVastustajanSiirto();
 		asema.paivitaAsema(&siirto);
 	}
 	

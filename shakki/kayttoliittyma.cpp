@@ -21,6 +21,7 @@ Kayttoliittyma* Kayttoliittyma::getInstance()
 
 void Kayttoliittyma::piirraLauta()
 {
+	wcout << "Piirretään lauta..." << endl;
 	_setmode(_fileno(stdout), _O_U16TEXT);
 	char kirjaimet[] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
 
@@ -131,15 +132,17 @@ Siirto Kayttoliittyma::annaVastustajanSiirto()
 				return Siirto(false, true);
 		}
 
-		if (input.find('K') != std::string::npos)
+		if (input.find('S') != std::string::npos) // S found
+			nappulatyyppi = L"Sotilas";
+		else if (input.find('K') != std::string::npos) // K found
 			nappulatyyppi = L"Kuningas";
-		else if (input.find('D') != std::string::npos)
+		else if (input.find('D') != std::string::npos) // D found
 			nappulatyyppi = L"Daami";
-		else if (input.find('L') != std::string::npos)
+		else if (input.find('L') != std::string::npos) // L found
 			nappulatyyppi = L"Lähetti";
-		else if (input.find('R') != std::string::npos)
+		else if (input.find('R') != std::string::npos) // R found
 			nappulatyyppi = L"Ratsu";
-		else if (input.find('T') != std::string::npos)
+		else if (input.find('T') != std::string::npos) // T found
 			nappulatyyppi = L"Torni";
 		else
 			wcout << "Virheellinen siirto. Anna siirto muodossa Rg1-f3" << endl;

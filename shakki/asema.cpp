@@ -79,16 +79,16 @@ void Asema::paivitaAsema(Siirto *siirto)
 	if (siirto->onkoLyhytLinna())
 	{
 		if (_siirtovuoro == 0) {
-			_lauta[4][0] = NULL; // kuninkaan paikka tyhjä
-			_lauta[6][0] = vk; // kuninkaan uusi paikka
-			_lauta[7][0] = NULL; // tornin paikka tyhjä
-			_lauta[5][0] = vt; // tornin uusi paikka
+			_lauta[0][4] = NULL; // kuninkaan paikka tyhjä
+			_lauta[0][6] = vk; // kuninkaan uusi paikka
+			_lauta[0][7] = NULL; // tornin paikka tyhjä
+			_lauta[0][5] = vt; // tornin uusi paikka
 		}
 		if (_siirtovuoro == 1) {
-			_lauta[4][7] = NULL; // kuninkaan paikka tyhjä
-			_lauta[6][7] = mk; // kuninkaan uusi paikka
+			_lauta[7][4] = NULL; // kuninkaan paikka tyhjä
+			_lauta[7][6] = mk; // kuninkaan uusi paikka
 			_lauta[7][7] = NULL; // tornin paikka tyhjä
-			_lauta[5][7] = mt; // tornin uusi paikka
+			_lauta[7][5] = mt; // tornin uusi paikka
 		}
 	}
 
@@ -96,16 +96,16 @@ void Asema::paivitaAsema(Siirto *siirto)
 	if (siirto->onkoPitkalinna())
 	{
 		if (_siirtovuoro == 0) {
-			_lauta[4][0] = NULL; // kuninkaan paikka tyhjä
-			_lauta[2][0] = vk; // kuninkaan uusi paikka
+			_lauta[0][4] = NULL; // kuninkaan paikka tyhjä
+			_lauta[0][2] = vk; // kuninkaan uusi paikka
 			_lauta[0][0] = NULL; // tornin paikka tyhjä
-			_lauta[3][0] = vt; // tornin uusi paikka
+			_lauta[0][3] = vt; // tornin uusi paikka
 		}
 		if (_siirtovuoro == 1) {
-			_lauta[4][7] = NULL; // kuninkaan paikka tyhjä
-			_lauta[2][7] = mk; // kuninkaan uusi paikka
-			_lauta[0][7] = NULL; // tornin paikka tyhjä
-			_lauta[3][7] = mt; // tornin uusi paikka
+			_lauta[7][4] = NULL; // kuninkaan paikka tyhjä
+			_lauta[7][2] = mk; // kuninkaan uusi paikka
+			_lauta[7][0] = NULL; // tornin paikka tyhjä
+			_lauta[7][3] = mt; // tornin uusi paikka
 		}
 	}
 
@@ -121,10 +121,10 @@ void Asema::paivitaAsema(Siirto *siirto)
 		int y1 = alkuruutu->getRivi();
 		int x2 = loppuruutu->getSarake();
 		int y2 = loppuruutu->getRivi();
-		Nappula* nappula = _lauta[x1][y1]; // Voi olla että ei saa olla pointteri!!
-		_lauta[x1][y1] = NULL;
+		Nappula* nappula = _lauta[y1][x1]; // Voi olla että ei saa olla pointteri!!
+		_lauta[y1][x1] = NULL;
 		// Ja laittaa talteen otetun nappulan uuteen ruutuun
-		_lauta[x2][y2] = nappula;
+		_lauta[y2][x2] = nappula;
 
 		if (nappula->getKoodi() == MK) {
 			_onkoMustaKuningasLiikkunut = true;
@@ -156,19 +156,19 @@ void Asema::paivitaAsema(Siirto *siirto)
 			
 			// Valkoinen
 			if (_siirtovuoro == 0) {
-				if (_lauta[x2][y2]->getKoodi() == VS
-					&& _lauta[x2][y2 - 1]->getKoodi() == MS)
+				if (_lauta[y2][x2]->getKoodi() == VS
+					&& _lauta[y2 - 1][x2]->getKoodi() == MS)
 				{
-					_lauta[x2][y2 - 1] = NULL; // Valkoinen söi mustan
+					_lauta[y2 - 1][x2] = NULL; // Valkoinen söi mustan
 				}
 			}
 
 			// Musta
 			else if (_siirtovuoro == 1) {
-				if (_lauta[x2][y2]->getKoodi() == MS
-					&& _lauta[x2][y2 + 1]->getKoodi() == VS)
+				if (_lauta[y2][x2]->getKoodi() == MS
+					&& _lauta[y2 + 1][x2]->getKoodi() == VS)
 				{
-					_lauta[x2][y2 + 1] = NULL; // Musta söi valkoisen
+					_lauta[y2 + 1][x2] = NULL; // Musta söi valkoisen
 				}
 			}
 		}
@@ -185,30 +185,30 @@ void Asema::paivitaAsema(Siirto *siirto)
 				{
 				case 1:
 					if (y2 == 7)
-						_lauta[x2][y2] = vd;
+						_lauta[y2][x2] = vd;
 					else if (y2 == 0)
-						_lauta[x2][y2] = md;
+						_lauta[y2][x2] = md;
 					break;
 
 				case 2:
 					if (y2 == 7)
-						_lauta[x2][y2] = vt;
+						_lauta[y2][x2] = vt;
 					else if (y2 == 0)
-						_lauta[x2][y2] = mt;
+						_lauta[y2][x2] = mt;
 					break;
 				
 				case 3:
 					if (y2 == 7)
-						_lauta[x2][y2] = vl;
+						_lauta[y2][x2] = vl;
 					else if (y2 == 0)
-						_lauta[x2][y2] = ml;
+						_lauta[y2][x2] = ml;
 					break;
 
 				case 4:
 					if (y2 == 7)
-						_lauta[x2][y2] = vr;
+						_lauta[y2][x2] = vr;
 					else if (y2 == 0)
-						_lauta[x2][y2] = mr;
+						_lauta[y2][x2] = mr;
 					break;
 				}
 				
@@ -324,7 +324,7 @@ double Asema::laskeNappuloidenArvo(int vari)
 	for (int x = 0; x < 8; ++x) {
 		for (int y = 0; y < 8; ++y) {
 
-			int koodi = _lauta[x][y]->getKoodi();
+			int koodi = _lauta[y][x]->getKoodi();
 
 			switch (koodi)
 			{
@@ -468,7 +468,8 @@ MinMaxPaluu Asema::maxi(int syvyys)
 	if (lista.size() == 0) {
 		for (int x = 0; x < 8; x++) {
 			for (int y = 0; y < 8; y++) {
-				if (this->_lauta[x][y]->getKoodi() == VK) {
+				if (this->_lauta[y][x]->getKoodi() == VK)
+				{
 					kuninkaanRuutu.setSarake(x);
 					kuninkaanRuutu.setRivi(y);
 				}
@@ -476,18 +477,21 @@ MinMaxPaluu Asema::maxi(int syvyys)
 		}
 	}
 	//matti
-	if (this->onkoRuutuUhattu(&kuninkaanRuutu, 1)) {
+	if (this->onkoRuutuUhattu(&kuninkaanRuutu, 1))
+	{
 		paluu._evaluointiArvo = -1000000;
 		return paluu;
 	}
 
 	//patti
-	if (!this->onkoRuutuUhattu(&kuninkaanRuutu, 1)) {
+	if (!this->onkoRuutuUhattu(&kuninkaanRuutu, 1))
+	{
 		paluu._evaluointiArvo = 0;
 		return paluu;
 	}
 
-	if (syvyys == 0) {
+	if (syvyys == 0)
+	{
 		paluu._evaluointiArvo = this->evaluoi();
 		return paluu;
 	}
@@ -526,12 +530,12 @@ MinMaxPaluu Asema::mini(int syvyys)
 bool Asema::onkoRuutuUhattu(Ruutu* ruutu, int vastustajanVari)
 {
 	std::list<Siirto> vastustajaSiirrotLista;
-	for (int i = 7; i >= 0; i--) {
-		for (int j = 0; j < 8; j++) {
-			if (this->_lauta[i][j] == NULL)
+	for (int x = 0; x < 8; ) {
+		for (int y = 0; y < 8; y++) {
+			if (this->_lauta[y][x] == NULL)
 				continue;
-			if (this->_lauta[i][j]->getVari() == vastustajanVari)
-				this->_lauta[i][j]->annaSiirrot(vastustajaSiirrotLista, &Ruutu(i, j), this, vastustajanVari);
+			if (this->_lauta[y][x]->getVari() == vastustajanVari)
+				this->_lauta[y][x]->annaSiirrot(vastustajaSiirrotLista, &Ruutu(y, x), this, vastustajanVari);
 		}
 	}
 
@@ -539,7 +543,8 @@ bool Asema::onkoRuutuUhattu(Ruutu* ruutu, int vastustajanVari)
 	bool ruutuOK = true;
 	for (auto siirto : vastustajaSiirrotLista)
 	{
-		if (ruutu->getSarake() == siirto.getLoppuruutu().getSarake() && ruutu->getRivi() == siirto.getLoppuruutu().getRivi()) {
+		if (ruutu->getSarake() == siirto.getLoppuruutu().getSarake() && ruutu->getRivi() == siirto.getLoppuruutu().getRivi())
+		{
 			ruutuOK = false;
 			break;
 		}
@@ -569,15 +574,15 @@ void Asema::annaLinnoitusSiirrot(std::list<Siirto>& lista, int vari)
 	{
 		// Lyhyt
 		if (!this->getOnkoValkeaKuningasLiikkunut() && !this->getOnkoValkeaKTliikkunut()
-			&& this->onkoRuutuUhattu(&Ruutu(4, 0), !vari) && this->onkoRuutuUhattu(&Ruutu(5, 0), !vari) && this->onkoRuutuUhattu(&Ruutu(6, 0), !vari)
-			&& this->_lauta[5][0] == NULL && this->_lauta[6][0] == NULL)
+			&& this->onkoRuutuUhattu(&Ruutu(0, 4), !vari) && this->onkoRuutuUhattu(&Ruutu(0, 5), !vari) && this->onkoRuutuUhattu(&Ruutu(0, 6), !vari)
+			&& this->_lauta[0][5] == NULL && this->_lauta[0][6] == NULL)
 		{
 			lista.push_back(Siirto(true, false));
 		}
 		// Pitkä
 		if (!this->getOnkoValkeaKuningasLiikkunut() && !this->getOnkoValkeaDTliikkunut()
-			&& this->onkoRuutuUhattu(&Ruutu(4, 0), !vari) && this->onkoRuutuUhattu(&Ruutu(3, 0), !vari) && this->onkoRuutuUhattu(&Ruutu(2, 0), !vari)
-			&& this->_lauta[3][0] == NULL && this->_lauta[2][0] == NULL)
+			&& this->onkoRuutuUhattu(&Ruutu(0, 4), !vari) && this->onkoRuutuUhattu(&Ruutu(0, 3), !vari) && this->onkoRuutuUhattu(&Ruutu(0, 2), !vari)
+			&& this->_lauta[0][3] == NULL && this->_lauta[0][2] == NULL)
 		{
 			lista.push_back(Siirto(false, true));
 		}
@@ -588,15 +593,15 @@ void Asema::annaLinnoitusSiirrot(std::list<Siirto>& lista, int vari)
 	{
 		// Lyhyt
 		if (!this->getOnkoMustaKuningasLiikkunut() && !this->getOnkoMustaKTliikkunut()
-			&& this->onkoRuutuUhattu(&Ruutu(4, 7), !vari) && this->onkoRuutuUhattu(&Ruutu(5, 7), !vari) && this->onkoRuutuUhattu(&Ruutu(6, 7), !vari)
-			&& this->_lauta[5][7] == NULL && this->_lauta[6][7] == NULL)
+			&& this->onkoRuutuUhattu(&Ruutu(7, 4), !vari) && this->onkoRuutuUhattu(&Ruutu(7, 5), !vari) && this->onkoRuutuUhattu(&Ruutu(7, 6), !vari)
+			&& this->_lauta[7][5] == NULL && this->_lauta[7][6] == NULL)
 		{
 			lista.push_back(Siirto(true, false));
 		}
 		// Pitkä
 		if (!this->getOnkoValkeaKuningasLiikkunut() && !this->getOnkoValkeaDTliikkunut()
-			&& this->onkoRuutuUhattu(&Ruutu(4, 7), !vari) && this->onkoRuutuUhattu(&Ruutu(3, 7), !vari) && this->onkoRuutuUhattu(&Ruutu(2, 7), !vari)
-			&& this->_lauta[3][7] == NULL && this->_lauta[2][7] == NULL)
+			&& this->onkoRuutuUhattu(&Ruutu(7, 4), !vari) && this->onkoRuutuUhattu(&Ruutu(7, 3), !vari) && this->onkoRuutuUhattu(&Ruutu(7, 2), !vari)
+			&& this->_lauta[7][3] == NULL && this->_lauta[7][2] == NULL)
 		{
 			lista.push_back(Siirto(false, true));
 		}
@@ -607,16 +612,16 @@ void Asema::annaLaillisetSiirrot(std::list<Siirto>& lista)
 {
 	int vari = this->getSiirtovuoro();
 
-	for (int i = 0; i < 8; i++) {
-		for (int j = 0; j < 8; j++) {
+	for (int x = 0; x < 8; x++) {
+		for (int y = 0; y < 8; y++) {
 			// Ei kysele tyhjiltä ruuduilta nappulan nimeä
-			if (this->_lauta[i][j] == NULL) {
+			if (this->_lauta[y][x] == NULL) {
 				continue;
 			}
-			if (this->_lauta[i][j]->getVari() != vari) {
+			if (this->_lauta[y][x]->getVari() != vari) {
 				continue;
 			}
-			this->_lauta[i][j]->annaSiirrot(lista, &Ruutu(i, j), this, vari); // Myöhäinen sidonta
+			this->_lauta[y][x]->annaSiirrot(lista, &Ruutu(y, x), this, vari); // Myöhäinen sidonta
 		}
 	}
 
