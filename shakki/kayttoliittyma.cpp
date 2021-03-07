@@ -120,6 +120,7 @@ Siirto Kayttoliittyma::annaVastustajanSiirto()
 
 		if (input == L"0")
 		{
+			wcout << "Lopetetaan..." << endl;
 			break;
 		}
 
@@ -150,8 +151,6 @@ Siirto Kayttoliittyma::annaVastustajanSiirto()
 		alkuasema = input.substr(1, 2);
 		loppuasema = input.substr(4, 5);
 
-		// wcout << "Nappulatyyppi: " << nappulatyyppi << endl << "Nappula :" << alkuasema << " " << loppuasema << endl;
-
 		int x1, y1, x2, y2;
 
 		char c = alkuasema[0];
@@ -161,7 +160,7 @@ Siirto Kayttoliittyma::annaVastustajanSiirto()
 		}
 		try
 		{
-			y1 = std::stoi(alkuasema.substr(1, 2));
+			y1 = std::stoi(alkuasema.substr(1, 2)) - 1;
 		}
 		catch (...) {
 			wcout << "\nFail!";
@@ -174,7 +173,7 @@ Siirto Kayttoliittyma::annaVastustajanSiirto()
 		}
 		try
 		{
-			y2 = std::stoi(loppuasema.substr(1, 2));
+			y2 = std::stoi(loppuasema.substr(1, 2)) - 1;
 		}
 		catch (...) {
 			wcout << "\nFail!";
@@ -182,8 +181,8 @@ Siirto Kayttoliittyma::annaVastustajanSiirto()
 
 		wcout << x1 << " " << y1 << " " <<  x2 << " " << y2 << endl << endl;
 
-		Ruutu alkuruutu(x1, y1);
-		Ruutu loppuruutu(x2, y2);
+		Ruutu alkuruutu(y1, x1);
+		Ruutu loppuruutu(y2, x2);
 
 		Siirto siirto(alkuruutu, loppuruutu);
 

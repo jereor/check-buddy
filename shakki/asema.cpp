@@ -68,16 +68,15 @@ Asema::Asema()
 	setSiirtovuoro(0);
 }
 
-
 void Asema::paivitaAsema(Siirto *siirto)
 {
 	// Kaksoisaskel-lippu on oletusarvoisesti pois päältä
 	kaksoisaskelSarakkeella = -1;
 
-
 	//Tarkastetaan onko siirto lyhyt linna
 	if (siirto->onkoLyhytLinna())
 	{
+		wcout << "Tehdään lyhyt linna" << endl;
 		if (_siirtovuoro == 0) {
 			_lauta[0][4] = NULL; // kuninkaan paikka tyhjä
 			_lauta[0][6] = vk; // kuninkaan uusi paikka
@@ -95,6 +94,7 @@ void Asema::paivitaAsema(Siirto *siirto)
 	// Onko pitkä linna
 	if (siirto->onkoPitkalinna())
 	{
+		wcout << "Tehdään pitkä linna" << endl;
 		if (_siirtovuoro == 0) {
 			_lauta[0][4] = NULL; // kuninkaan paikka tyhjä
 			_lauta[0][2] = vk; // kuninkaan uusi paikka
@@ -121,10 +121,12 @@ void Asema::paivitaAsema(Siirto *siirto)
 		int y1 = alkuruutu->getRivi();
 		int x2 = loppuruutu->getSarake();
 		int y2 = loppuruutu->getRivi();
-		Nappula* nappula = _lauta[y1][x1]; // Voi olla että ei saa olla pointteri!!
-		_lauta[y1][x1] = NULL;
-		// Ja laittaa talteen otetun nappulan uuteen ruutuun
-		_lauta[y2][x2] = nappula;
+		Nappula* nappula = _lauta[y1][x1];
+		_lauta[y2][x2] = nappula; // Laittaa talteen otetun nappulan uuteen ruutuun
+		_lauta[y1][x1] = NULL; // Ja tyhjentää ruudun
+		
+		wcout << "X1:" << x1 << " Y1:" << y1 << " X2:" << x2 << " Y2:" << y2 << endl;
+		wcout << "Nappulanumero: " << nappula->getKoodi() << endl;
 
 		if (nappula->getKoodi() == MK) {
 			_onkoMustaKuningasLiikkunut = true;
@@ -132,16 +134,16 @@ void Asema::paivitaAsema(Siirto *siirto)
 		if (nappula->getKoodi() == VK) {
 			_onkoValkeaKuningasLiikkunut = true;
 		}
-		if (nappula->getKoodi() == VT && _lauta[0][0] == NULL) {
+		if (nappula->getKoodi() == VT && _lauta[0][0] == NULL) { // Valkoisen daami torni
 			_onkoValkeaDTliikkunut = true;
 		}
-		if (nappula->getKoodi() == VT && _lauta[0][7] == NULL) {
+		if (nappula->getKoodi() == VT && _lauta[0][7] == NULL) { // Valkoisen kuningas torni
 			_onkoValkeaKTliikkunut = true;
 		}
-		if (nappula->getKoodi() == MT && _lauta[7][0] == NULL) {
+		if (nappula->getKoodi() == MT && _lauta[7][0] == NULL) { // Mustan daami torni
 			_onkoMustaDTliikkunut = true;
 		}
-		if (nappula->getKoodi() == MT && _lauta[7][7] == NULL) {
+		if (nappula->getKoodi() == MT && _lauta[7][7] == NULL) { // Mustan kuningas torni
 			_onkoMustaKTliikkunut = true;
 		}
 		if (nappula->getKoodi() == MS && alkuruutu->getRivi() - loppuruutu->getRivi() == 2) {
@@ -153,23 +155,18 @@ void Asema::paivitaAsema(Siirto *siirto)
 
 		// Ohestalyönti on tyhjään ruutuun. Vieressä oleva (sotilas) poistetaan.
 		if (kaksoisaskelSarakkeella != -1) {
-			
 			// Valkoinen
 			if (_siirtovuoro == 0) {
-				if (_lauta[y2][x2]->getKoodi() == VS
-					&& _lauta[y2 - 1][x2]->getKoodi() == MS)
-				{
-					_lauta[y2 - 1][x2] = NULL; // Valkoinen söi mustan
-				}
+				if (_lauta[y2][x2] != NULL && _lauta[y2 - 1][x2] != NULL)
+					if (_lauta[y2][x2]->getKoodi() == VS && _lauta[y2 - 1][x2]->getKoodi() == MS)
+						_lauta[y2 - 1][x2] = NULL; // Valkoinen söi mustan
 			}
 
 			// Musta
 			else if (_siirtovuoro == 1) {
-				if (_lauta[y2][x2]->getKoodi() == MS
-					&& _lauta[y2 + 1][x2]->getKoodi() == VS)
-				{
+				if (_lauta[y2][x2] != NULL && _lauta[y2 + 1][x2] != NULL)
+					if (_lauta[y2][x2]->getKoodi() == MS && _lauta[y2 + 1][x2]->getKoodi() == VS)
 					_lauta[y2 + 1][x2] = NULL; // Musta söi valkoisen
-				}
 			}
 		}
 
@@ -215,9 +212,11 @@ void Asema::paivitaAsema(Siirto *siirto)
 			} while (korotus > 1 && korotus < 4);
 		}
 
+		wcout << x1 << " " << y1 << " -> " << x2 << " " << y2 << endl;
+
 		// päivitetään _siirtovuoro
-		if (getSiirtovuoro() == 0) setSiirtovuoro(1);
-		else setSiirtovuoro(0);
+		/*if (getSiirtovuoro() == 0) setSiirtovuoro(1);
+		else setSiirtovuoro(0);*/
 	}
 
 }
@@ -612,8 +611,8 @@ void Asema::annaLaillisetSiirrot(std::list<Siirto>& lista)
 {
 	int vari = this->getSiirtovuoro();
 
-	for (int x = 0; x < 8; x++) {
-		for (int y = 0; y < 8; y++) {
+	for (int y = 0; y < 8; y++) {
+		for (int x = 0; x < 8; x++) {
 			// Ei kysele tyhjiltä ruuduilta nappulan nimeä
 			if (this->_lauta[y][x] == NULL) {
 				continue;

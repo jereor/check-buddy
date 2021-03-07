@@ -64,7 +64,7 @@ void Torni::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, in
 
 	// Tornin liike alas
 	for (int i = 1; i < 8; i++) {
-		if (lahtoruutuY - i > 0) {
+		if (lahtoruutuY - i >= 0) {
 			// Siirto on OK, jos yläpuolella oleva ruutu on tyhjä
 			if (asema->_lauta[lahtoruutuY - i][lahtoruutuX] == NULL) {
 				wcout << "Alas: " << (lahtoruutuY - i) << endl;

@@ -23,6 +23,6 @@ public:
 private:
 	Ruutu _alkuRuutu;
 	Ruutu _loppuRuutu;
-	bool _lyhytLinna;
-	bool _pitkaLinna;
+	bool _lyhytLinna = false;
+	bool _pitkaLinna = false;
 };
