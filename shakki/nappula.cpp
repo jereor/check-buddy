@@ -53,10 +53,13 @@ void Torni::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, in
 			else
 			{
 				// Siirto on OK, jos yläpuolella olevassa ruudussa on vastustajan nappula
-				loppuvari = asema->_lauta[alkuruutuY + 1][alkuruutuX]->getVari();
-				if (alkuvari != loppuvari) {
-					lista.push_back(Siirto(*ruutu, Ruutu(alkuruutuY + i, alkuruutuX)));
-					break;
+				if (asema->_lauta[alkuruutuY + 1][alkuruutuX] != NULL)
+				{
+					loppuvari = asema->_lauta[alkuruutuY + 1][alkuruutuX]->getVari();
+					if (alkuvari != loppuvari) {
+						lista.push_back(Siirto(*ruutu, Ruutu(alkuruutuY + i, alkuruutuX)));
+						break;
+					}
 				}
 				else // Ruudussa on oma nappula, joten lopetetaan ylös laskenta
 				{

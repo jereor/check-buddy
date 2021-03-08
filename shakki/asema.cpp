@@ -122,92 +122,96 @@ void Asema::paivitaAsema(Siirto *siirto)
 		int x2 = loppuruutu->getSarake();
 		int y2 = loppuruutu->getRivi();
 		Nappula* nappula = _lauta[y1][x1];
-		_lauta[y2][x2] = nappula; // Laittaa talteen otetun nappulan uuteen ruutuun
-		_lauta[y1][x1] = NULL; // Ja tyhjentää ruudun
 
-		if (nappula->getKoodi() == MK) {
-			_onkoMustaKuningasLiikkunut = true;
-		}
-		if (nappula->getKoodi() == VK) {
-			_onkoValkeaKuningasLiikkunut = true;
-		}
-		if (nappula->getKoodi() == VT && _lauta[0][0] == NULL) { // Valkoisen daami torni
-			_onkoValkeaDTliikkunut = true;
-		}
-		if (nappula->getKoodi() == VT && _lauta[0][7] == NULL) { // Valkoisen kuningas torni
-			_onkoValkeaKTliikkunut = true;
-		}
-		if (nappula->getKoodi() == MT && _lauta[7][0] == NULL) { // Mustan daami torni
-			_onkoMustaDTliikkunut = true;
-		}
-		if (nappula->getKoodi() == MT && _lauta[7][7] == NULL) { // Mustan kuningas torni
-			_onkoMustaKTliikkunut = true;
-		}
-		if (nappula->getKoodi() == MS && alkuruutu->getRivi() - loppuruutu->getRivi() == 2) {
-			kaksoisaskelSarakkeella = loppuruutu->getSarake();
-		}
-		if (nappula->getKoodi() == VS && loppuruutu->getRivi() - alkuruutu->getRivi() == 2) {
-			kaksoisaskelSarakkeella = loppuruutu->getSarake();
-		}
-
-		// Ohestalyönti on tyhjään ruutuun. Vieressä oleva (sotilas) poistetaan.
-		if (kaksoisaskelSarakkeella != -1) {
-			// Valkoinen
-			if (_siirtovuoro == 0) {
-				if (_lauta[y2][x2] != NULL && _lauta[y2 - 1][x2] != NULL)
-					if (_lauta[y2][x2]->getKoodi() == VS && _lauta[y2 - 1][x2]->getKoodi() == MS)
-						_lauta[y2 - 1][x2] = NULL; // Valkoinen söi mustan
-			}
-
-			// Musta
-			else if (_siirtovuoro == 1) {
-				if (_lauta[y2][x2] != NULL && _lauta[y2 + 1][x2] != NULL)
-					if (_lauta[y2][x2]->getKoodi() == MS && _lauta[y2 + 1][x2]->getKoodi() == VS)
-					_lauta[y2 + 1][x2] = NULL; // Musta söi valkoisen
-			}
-		}
-
-		if ((nappula->getKoodi() == VS || nappula->getKoodi() == MS) 
-			&& (loppuruutu->getRivi() == 0 || loppuruutu->getRivi() == 7))
+		if (nappula) // Nappulan tarkistus alkaa
 		{
-			int korotus;
-			do {
-				wcout << "Miksi korotetaan? (1 = Daami, 2 = Torni, 3 = Lähetti, 4 = Ratsu)" << endl;
-				wcin >> korotus;
+			_lauta[y2][x2] = nappula; // Laittaa talteen otetun nappulan uuteen ruutuun
+			_lauta[y1][x1] = NULL; // Ja tyhjentää ruudun
 
-				switch (korotus)
-				{
-				case 1:
-					if (y2 == 7)
-						_lauta[y2][x2] = vd;
-					else if (y2 == 0)
-						_lauta[y2][x2] = md;
-					break;
+			if (nappula->getKoodi() == MK) {
+				_onkoMustaKuningasLiikkunut = true;
+			}
+			if (nappula->getKoodi() == VK) {
+				_onkoValkeaKuningasLiikkunut = true;
+			}
+			if (nappula->getKoodi() == VT && _lauta[0][0] == NULL) { // Valkoisen daami torni
+				_onkoValkeaDTliikkunut = true;
+			}
+			if (nappula->getKoodi() == VT && _lauta[0][7] == NULL) { // Valkoisen kuningas torni
+				_onkoValkeaKTliikkunut = true;
+			}
+			if (nappula->getKoodi() == MT && _lauta[7][0] == NULL) { // Mustan daami torni
+				_onkoMustaDTliikkunut = true;
+			}
+			if (nappula->getKoodi() == MT && _lauta[7][7] == NULL) { // Mustan kuningas torni
+				_onkoMustaKTliikkunut = true;
+			}
+			if (nappula->getKoodi() == MS && alkuruutu->getRivi() - loppuruutu->getRivi() == 2) {
+				kaksoisaskelSarakkeella = loppuruutu->getSarake();
+			}
+			if (nappula->getKoodi() == VS && loppuruutu->getRivi() - alkuruutu->getRivi() == 2) {
+				kaksoisaskelSarakkeella = loppuruutu->getSarake();
+			}
 
-				case 2:
-					if (y2 == 7)
-						_lauta[y2][x2] = vt;
-					else if (y2 == 0)
-						_lauta[y2][x2] = mt;
-					break;
-				
-				case 3:
-					if (y2 == 7)
-						_lauta[y2][x2] = vl;
-					else if (y2 == 0)
-						_lauta[y2][x2] = ml;
-					break;
-
-				case 4:
-					if (y2 == 7)
-						_lauta[y2][x2] = vr;
-					else if (y2 == 0)
-						_lauta[y2][x2] = mr;
-					break;
+			// Ohestalyönti on tyhjään ruutuun. Vieressä oleva (sotilas) poistetaan.
+			if (kaksoisaskelSarakkeella != -1) {
+				// Valkoinen
+				if (_siirtovuoro == 0) {
+					if (_lauta[y2][x2] != NULL && _lauta[y2 - 1][x2] != NULL)
+						if (_lauta[y2][x2]->getKoodi() == VS && _lauta[y2 - 1][x2]->getKoodi() == MS)
+							_lauta[y2 - 1][x2] = NULL; // Valkoinen söi mustan
 				}
-				
-			} while (korotus > 1 && korotus < 4);
-		}
+
+				// Musta
+				else if (_siirtovuoro == 1) {
+					if (_lauta[y2][x2] != NULL && _lauta[y2 + 1][x2] != NULL)
+						if (_lauta[y2][x2]->getKoodi() == MS && _lauta[y2 + 1][x2]->getKoodi() == VS)
+							_lauta[y2 + 1][x2] = NULL; // Musta söi valkoisen
+				}
+			}
+
+			if ((nappula->getKoodi() == VS || nappula->getKoodi() == MS)
+				&& (loppuruutu->getRivi() == 0 || loppuruutu->getRivi() == 7))
+			{
+				int korotus;
+				do {
+					wcout << "Miksi korotetaan? (1 = Daami, 2 = Torni, 3 = Lähetti, 4 = Ratsu)" << endl;
+					wcin >> korotus;
+
+					switch (korotus)
+					{
+					case 1:
+						if (y2 == 7)
+							_lauta[y2][x2] = vd;
+						else if (y2 == 0)
+							_lauta[y2][x2] = md;
+						break;
+
+					case 2:
+						if (y2 == 7)
+							_lauta[y2][x2] = vt;
+						else if (y2 == 0)
+							_lauta[y2][x2] = mt;
+						break;
+
+					case 3:
+						if (y2 == 7)
+							_lauta[y2][x2] = vl;
+						else if (y2 == 0)
+							_lauta[y2][x2] = ml;
+						break;
+
+					case 4:
+						if (y2 == 7)
+							_lauta[y2][x2] = vr;
+						else if (y2 == 0)
+							_lauta[y2][x2] = mr;
+						break;
+					}
+
+				} while (korotus > 1 && korotus < 4);
+			}
+		} // Nappulan tarkistus loppuu
 
 		// päivitetään _siirtovuoro
 		if (getSiirtovuoro() == 0) setSiirtovuoro(1);
