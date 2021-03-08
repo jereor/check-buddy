@@ -16,6 +16,7 @@ int main()
 	std::wcout << "Tervetuloa pelaamaan!\n";
 	int lopetus = 100;
 	Asema asema; 
+	Siirto siirto;
 	Kayttoliittyma::getInstance()->aseta_asema(&asema);
 
 	Peli peli(Kayttoliittyma::getInstance()->kysyVastustajanVari());
@@ -41,15 +42,14 @@ int main()
 		}
 
 		// Muuten, jatketaan laskemaan paras siirto
-		Siirto siirto = Kayttoliittyma::getInstance()->annaVastustajanSiirto();
 		if (asema.getSiirtovuoro() == koneenVari) {
 			wcout << "Lasketaan paras siirto" << endl;
 			MinMaxPaluu paluu;
 			if (koneenVari == 0) {
-				paluu = asema.maxi(4);
+				paluu = asema.maxi(2);
 			}
 			else {
-				paluu = asema.mini(4);
+				paluu = asema.mini(2);
 			}
 			siirto = paluu._parasSiirto;
 		}

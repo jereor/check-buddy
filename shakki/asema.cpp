@@ -124,9 +124,6 @@ void Asema::paivitaAsema(Siirto *siirto)
 		Nappula* nappula = _lauta[y1][x1];
 		_lauta[y2][x2] = nappula; // Laittaa talteen otetun nappulan uuteen ruutuun
 		_lauta[y1][x1] = NULL; // Ja tyhjentää ruudun
-		
-		wcout << "X1:" << x1 << " Y1:" << y1 << " X2:" << x2 << " Y2:" << y2 << endl;
-		wcout << "Nappulanumero: " << nappula->getKoodi() << endl;
 
 		if (nappula->getKoodi() == MK) {
 			_onkoMustaKuningasLiikkunut = true;
@@ -211,8 +208,6 @@ void Asema::paivitaAsema(Siirto *siirto)
 				
 			} while (korotus > 1 && korotus < 4);
 		}
-
-		wcout << x1 << " " << y1 << " -> " << x2 << " " << y2 << endl;
 
 		// päivitetään _siirtovuoro
 		if (getSiirtovuoro() == 0) setSiirtovuoro(1);
@@ -454,48 +449,74 @@ MinMaxPaluu Asema::minimax(int syvyys)
 
 MinMaxPaluu Asema::maxi(int syvyys) 
 {
+	wcout << "Syvyys: " << syvyys << endl;
+	wcout << "Maxissa..." << endl;
 	std::list<Siirto> lista;
 	Ruutu kuninkaanRuutu;
 	this->annaLaillisetSiirrot(lista);
+	wcout << "Takaisin maxissa..." << endl;
 	double arvo;
 	Asema uusiAsema;
 	Siirto _parasSiirto;
 	MinMaxPaluu paluu;
 	double pisteet;
+	int vari = getSiirtovuoro();
 
 	if (lista.size() == 0) {
 		for (int y = 0; y < 8; y++) {
 			for (int x = 0; x < 8; x++) {
-				if (this->_lauta[y][x]->getKoodi() == VK)
+				switch (vari)
 				{
-					kuninkaanRuutu.setSarake(x);
-					kuninkaanRuutu.setRivi(y);
+				case(0):
+					if (this->_lauta[y][x]->getKoodi() == VK)
+					{
+						kuninkaanRuutu.setSarake(x);
+						kuninkaanRuutu.setRivi(y);
+						wcout << "Kuningas paikannettu." << endl;
+						break;
+					}
+				case(1):
+					if (this->_lauta[y][x]->getKoodi() == MK)
+					{
+						kuninkaanRuutu.setSarake(x);
+						kuninkaanRuutu.setRivi(y);
+						wcout << "Kuningas paikannettu." << endl;
+						break;
+					}
 				}
 			}
 		}
 	}
+	wcout << "Onko kuningas uhattu?" << endl;
+	wcout << "Matti..." << endl;
 	//matti
-	if (this->onkoRuutuUhattu(&kuninkaanRuutu, 1))
+	/*if (this->onkoRuutuUhattu(&kuninkaanRuutu, 1))
 	{
 		paluu._evaluointiArvo = -1000000;
 		return paluu;
-	}
+	}*/
 
+	wcout << "Patti..." << endl;
 	//patti
-	if (!this->onkoRuutuUhattu(&kuninkaanRuutu, 1))
+	/*if (!this->onkoRuutuUhattu(&kuninkaanRuutu, 1))
 	{
 		paluu._evaluointiArvo = 0;
 		return paluu;
-	}
+	}*/
 
+	wcout << "Syvyys: " << syvyys << endl;
 	if (syvyys == 0)
 	{
+		wcout << "Syvyys 0. Evaluoidaan ja palautetaan..." << endl;
 		paluu._evaluointiArvo = this->evaluoi();
 		return paluu;
 	}
 
+	wcout << "Lasketaan paras siirto..." << endl;
 	double maxi = -1000000;
+	int x = 0;
 	for (auto s : lista) {
+		wcout << "Siirto: " << x << endl;
 		uusiAsema = *this;
 		uusiAsema.paivitaAsema(&s);
 		arvo = uusiAsema.mini(syvyys - 1)._evaluointiArvo;
@@ -503,6 +524,7 @@ MinMaxPaluu Asema::maxi(int syvyys)
 			maxi = arvo;
 			_parasSiirto = s;
 		}
+		x++;
 	}
 	paluu._evaluointiArvo = maxi;
 	paluu._parasSiirto = _parasSiirto;
@@ -523,48 +545,75 @@ MinMaxPaluu Asema::maxi(int syvyys)
 
 MinMaxPaluu Asema::mini(int syvyys) 
 {
+	wcout << "Syvyys: " << syvyys << endl;
+	wcout << "Minissä..." << endl;
 	std::list<Siirto> lista;
 	Ruutu kuninkaanRuutu;
 	this->annaLaillisetSiirrot(lista);
+	wcout << "Takaisin minissä..." << endl;
 	double arvo;
 	Asema uusiAsema;
 	Siirto _parasSiirto;
 	MinMaxPaluu paluu;
 	double pisteet;
+	int vari = getSiirtovuoro();
 
 	if (lista.size() == 0) {
 		for (int y = 0; y < 8; y++) {
+			
 			for (int x = 0; x < 8; x++) {
-				if (this->_lauta[y][x]->getKoodi() == VK)
+				switch (vari)
 				{
-					kuninkaanRuutu.setSarake(x);
-					kuninkaanRuutu.setRivi(y);
+				case(0):
+					if (this->_lauta[y][x]->getKoodi() == VK)
+					{
+						kuninkaanRuutu.setSarake(x);
+						kuninkaanRuutu.setRivi(y);
+						wcout << "Kuningas paikannettu." << endl;
+						break;
+					}
+				case(1):
+					if (this->_lauta[y][x]->getKoodi() == MK)
+					{
+						kuninkaanRuutu.setSarake(x);
+						kuninkaanRuutu.setRivi(y);
+						wcout << "Kuningas paikannettu." << endl;
+						break;
+					}
 				}
 			}
 		}
 	}
+
+	wcout << "Onko kuningas uhattu?" << endl;
+	wcout << "Matti..." << endl;
 	//matti
-	if (this->onkoRuutuUhattu(&kuninkaanRuutu, 1))
+	/*if (this->onkoRuutuUhattu(&kuninkaanRuutu, 1))
 	{
 		paluu._evaluointiArvo = -1000000;
 		return paluu;
-	}
+	}*/
 
+	wcout << "Patti..." << endl;
 	//patti
-	if (!this->onkoRuutuUhattu(&kuninkaanRuutu, 1))
+	/*if (!this->onkoRuutuUhattu(&kuninkaanRuutu, 1))
 	{
 		paluu._evaluointiArvo = 0;
 		return paluu;
-	}
+	}*/
 
 	if (syvyys == 0)
 	{
+		wcout << "Syvyys 0. Evaluoidaan ja palautetaan..." << endl;
 		paluu._evaluointiArvo = this->evaluoi();
 		return paluu;
 	}
 
+	wcout << "Lasketaan paras siirto..." << endl;
 	double mini = 1000000;
+	int x = 0;
 	for (auto s : lista) {
+		wcout << "Siirto: " << x << endl;
 		uusiAsema = *this;
 		uusiAsema.paivitaAsema(&s);
 		arvo = uusiAsema.mini(syvyys - 1)._evaluointiArvo;
@@ -675,6 +724,7 @@ void Asema::annaLinnoitusSiirrot(std::list<Siirto>& lista, int vari)
 
 void Asema::annaLaillisetSiirrot(std::list<Siirto>& lista)
 {
+	wcout << "Käydään läpi lailliset siirrot..." << endl;
 	int vari = this->getSiirtovuoro();
 
 	for (int y = 0; y < 8; y++) {
@@ -683,13 +733,16 @@ void Asema::annaLaillisetSiirrot(std::list<Siirto>& lista)
 			if (this->_lauta[y][x] == NULL) {
 				continue;
 			}
-			if (this->_lauta[y][x]->getVari() != vari) {
+			else if (this->_lauta[y][x]->getVari() != vari) {
 				continue;
 			}
-			this->_lauta[y][x]->annaSiirrot(lista, &Ruutu(y, x), this, vari); // Myöhäinen sidonta
+			else
+				this->_lauta[y][x]->annaSiirrot(lista, &Ruutu(y, x), this, vari); // Myöhäinen sidonta
 		}
 	}
+	wcout << "Lailliset siirrot läpikäyty." << endl;
 
 	this->annaLinnoitusSiirrot(lista, vari);
-	this->huolehdiKuninkaanShakeista(lista, vari);
+	//this->huolehdiKuninkaanShakeista(lista, vari);
+	wcout << "Linnoitukset lisätty." << endl;
 }
