@@ -315,37 +315,38 @@ double Asema::laskeNappuloidenArvo(int vari)
 	double vArvo = 0;
 	double mArvo = 0;
 	
-	for (int x = 0; x < 8; ++x) {
-		for (int y = 0; y < 8; ++y) {
-
-			int koodi = _lauta[y][x]->getKoodi();
-
-			switch (koodi)
+	for (int y = 0; y < 8; y++) {
+		for (int x = 0; x < 8; x++) {
+			if (_lauta[y][x] != NULL)
 			{
-			case 0: // Valkoinen torni
-				vArvo += 5;
-			case 1: // Valkoinen ratsu
-				vArvo += 3;
-			case 2: // Valkoinen lähetti
-				vArvo += 3.25;
-			case 3: // Valkoinen daami
-				vArvo += 9;
-			case 4: // Valkoinen kuningas
-				vArvo += 0;
-			case 5: // Valkoinen sotilas
-				vArvo += 1;
-			case 6: // Musta torni
-				mArvo += 5;
-			case 7: // Musta ratsu
-				mArvo += 3;
-			case 8: // Musta lähetti
-				mArvo += 3.25;
-			case 9: // Musta daami
-				mArvo += 9;
-			case 10: // Musta kuningas
-				mArvo += 0;
-			case 11: // Musta sotilas
-				mArvo += 1;
+				int koodi = _lauta[y][x]->getKoodi();
+				switch (koodi)
+				{
+				case 0: // Valkoinen torni
+					vArvo += 5;
+				case 1: // Valkoinen ratsu
+					vArvo += 3;
+				case 2: // Valkoinen lähetti
+					vArvo += 3.25;
+				case 3: // Valkoinen daami
+					vArvo += 9;
+				case 4: // Valkoinen kuningas
+					vArvo += 0;
+				case 5: // Valkoinen sotilas
+					vArvo += 1;
+				case 6: // Musta torni
+					mArvo += 5;
+				case 7: // Musta ratsu
+					mArvo += 3;
+				case 8: // Musta lähetti
+					mArvo += 3.25;
+				case 9: // Musta daami
+					mArvo += 9;
+				case 10: // Musta kuningas
+					mArvo += 0;
+				case 11: // Musta sotilas
+					mArvo += 1;
+				}
 			}
 		}
 	}
