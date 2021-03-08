@@ -40,7 +40,7 @@ void Torni::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, in
 	int alkuruutuY = ruutu->getRivi();
 	int alkuruutuX = ruutu->getSarake();
 
-	int lahtovari = asema->_lauta[alkuruutuY][alkuruutuX]->getVari();
+	int alkuvari = asema->_lauta[alkuruutuY][alkuruutuX]->getVari();
 	int loppuvari;
 
 	// Tornin liike ylös
@@ -55,7 +55,7 @@ void Torni::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, in
 			{
 				// Siirto on OK, jos yläpuolella olevassa ruudussa on vastustajan nappula
 				loppuvari = asema->_lauta[alkuruutuY + 1][alkuruutuX]->getVari();
-				if (lahtovari != loppuvari) {
+				if (alkuvari != loppuvari) {
 					wcout << "Ylös: " << (alkuruutuY + i) << endl;
 					lista.push_back(Siirto(*ruutu, Ruutu(alkuruutuY + i, alkuruutuX)));
 					break;
@@ -80,7 +80,7 @@ void Torni::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, in
 			{
 				// Siirto on OK, jos yläpuolella olevassa ruudussa on vastustajan nappula
 				loppuvari = asema->_lauta[alkuruutuY - i][alkuruutuX]->getVari();
-				if (lahtovari != loppuvari) {
+				if (alkuvari != loppuvari) {
 					wcout << "Alas: " << (alkuruutuY - i) << endl;
 					lista.push_back(Siirto(*ruutu, Ruutu(alkuruutuY - i, alkuruutuX)));
 					break;
@@ -105,7 +105,7 @@ void Torni::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, in
 			{
 				// Siirto on OK, jos yläpuolella olevassa ruudussa on vastustajan nappula
 				loppuvari = asema->_lauta[alkuruutuY][alkuruutuX + i]->getVari();
-				if (lahtovari != loppuvari) {
+				if (alkuvari != loppuvari) {
 					wcout << "Oikealle: " << (alkuruutuX + i) << endl;
 					lista.push_back(Siirto(*ruutu, Ruutu(alkuruutuY, alkuruutuX + i)));
 					break;
@@ -130,7 +130,7 @@ void Torni::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, in
 			{
 				// Siirto on OK, jos yläpuolella olevassa ruudussa on vastustajan nappula
 				loppuvari = asema->_lauta[alkuruutuY][alkuruutuX - i]->getVari();
-				if (lahtovari != loppuvari) {
+				if (alkuvari != loppuvari) {
 					wcout << "Vasemmalle: " << (alkuruutuX - i) << endl;
 					lista.push_back(Siirto(*ruutu, Ruutu(alkuruutuY, alkuruutuX - i)));
 					break;
@@ -143,8 +143,10 @@ void Torni::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, in
 		}
 	}
 
-	delete[] & alkuruutuX;
-	delete[] & alkuruutuY;
+	delete[] &alkuruutuX;
+	delete[] &alkuruutuY;
+	delete[] &alkuvari;
+	delete[] &loppuvari;
 }
 
 
@@ -189,7 +191,17 @@ void Ratsu::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, in
 		{
 			lista.push_back(siirto);
 		}
+		delete[] &loppuruutuX;
+		delete[] &loppuruutuY;
 	}
+
+	delete[] &lahtoruutuY;
+	delete[] &lahtoruutuX;
+	delete[] &alkuRuutu;
+	delete[] &loppuRuutu;
+	delete[] &siirto;
+	delete[] &laillinenSiirto;
+	delete[] &liikkeet;
 }
 
 
@@ -222,6 +234,10 @@ void Lahetti::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, 
 					Ruutu loppu(loppuruutuY, loppuruutuX);
 					Siirto siirto(alku, loppu);
 					lista.push_back(siirto);
+
+					delete[] & alku;
+					delete[] & loppu;
+					delete[] & siirto;
 					break;
 				}
 			}
@@ -231,9 +247,18 @@ void Lahetti::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, 
 				Ruutu loppu(loppuruutuY, loppuruutuX);
 				Siirto siirto(alku, loppu);
 				lista.push_back(siirto);
+
+				delete[] &alku;
+				delete[] &loppu;
+				delete[] &siirto;
 			}
+			delete[] &nappula;
+			delete[] &loppuruutuX;
+			delete[] &loppuruutuY;
 		}
 	}
+	
+	delete[] &mahdolliset_suunnat;
 }
 
 
@@ -327,6 +352,8 @@ void Kuningas::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema,
 		}
 	}
 	
+	delete[] &alkuruutuX;
+	delete[] &alkuruutuY;
 }
 
 
@@ -379,6 +406,9 @@ void Sotilas::annaSiirrot(std::list<Siirto>& lista, Ruutu* ruutu, Asema* asema, 
 					lista.push_back(Siirto(*ruutu, Ruutu(2, asema->kaksoisaskelSarakkeella)));
 		}
 	}
+
+	delete[] &rivi;
+	delete[] &sarake;
 }
 
 
@@ -403,6 +433,11 @@ void Sotilas::lisaaSotilaanKorotukset(Siirto* siirto, std::list<Siirto>& lista, 
 		Siirto ratsuksi = *siirto;
 		ratsuksi._miksikorotetaan = asema->vr;
 		lista.push_back(ratsuksi);
+
+		delete[] & daamiksi;
+		delete[] & torniksi;
+		delete[] & lahetiksi;
+		delete[] & ratsuksi;
 	}
 
 	// Mustan korotus
@@ -423,5 +458,10 @@ void Sotilas::lisaaSotilaanKorotukset(Siirto* siirto, std::list<Siirto>& lista, 
 		Siirto ratsuksi = *siirto;
 		ratsuksi._miksikorotetaan = asema->mr;
 		lista.push_back(ratsuksi);
+
+		delete[] &daamiksi;
+		delete[] &torniksi;
+		delete[] &lahetiksi;
+		delete[] &ratsuksi;
 	}
 }

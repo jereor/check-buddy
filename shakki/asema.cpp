@@ -507,7 +507,7 @@ MinMaxPaluu Asema::maxi(int syvyys)
 	paluu._evaluointiArvo = maxi;
 	paluu._parasSiirto = _parasSiirto;
 
-	/*if (syvyys == 0)
+	/* if (syvyys == 0)
 		return minimax(syvyys);
 	int max = -oo;
 
@@ -523,7 +523,59 @@ MinMaxPaluu Asema::maxi(int syvyys)
 
 MinMaxPaluu Asema::mini(int syvyys) 
 {
+	std::list<Siirto> lista;
+	Ruutu kuninkaanRuutu;
+	this->annaLaillisetSiirrot(lista);
+	double arvo;
+	Asema uusiAsema;
+	Siirto _parasSiirto;
 	MinMaxPaluu paluu;
+	double pisteet;
+
+	if (lista.size() == 0) {
+		for (int y = 0; y < 8; y++) {
+			for (int x = 0; x < 8; x++) {
+				if (this->_lauta[y][x]->getKoodi() == VK)
+				{
+					kuninkaanRuutu.setSarake(x);
+					kuninkaanRuutu.setRivi(y);
+				}
+			}
+		}
+	}
+	//matti
+	if (this->onkoRuutuUhattu(&kuninkaanRuutu, 1))
+	{
+		paluu._evaluointiArvo = -1000000;
+		return paluu;
+	}
+
+	//patti
+	if (!this->onkoRuutuUhattu(&kuninkaanRuutu, 1))
+	{
+		paluu._evaluointiArvo = 0;
+		return paluu;
+	}
+
+	if (syvyys == 0)
+	{
+		paluu._evaluointiArvo = this->evaluoi();
+		return paluu;
+	}
+
+	double mini = 1000000;
+	for (auto s : lista) {
+		uusiAsema = *this;
+		uusiAsema.paivitaAsema(&s);
+		arvo = uusiAsema.mini(syvyys - 1)._evaluointiArvo;
+		if (arvo < mini) {
+			mini = arvo;
+			_parasSiirto = s;
+		}
+	}
+	paluu._evaluointiArvo = mini;
+	paluu._parasSiirto = _parasSiirto;
+
 	/*double pisteet;
 
 	if (syvyys == 0)
@@ -535,6 +587,7 @@ MinMaxPaluu Asema::mini(int syvyys)
 		if (pisteet < min)
 			min = score;
 	}*/
+
 	return paluu;
 }
 
